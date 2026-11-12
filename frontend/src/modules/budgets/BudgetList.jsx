@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import { getCurrentMonthYear, getMonthName } from '../../utils/helpers';
@@ -11,11 +11,7 @@ const BudgetList = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBudget, setSelectedBudget] = useState(null);
 
-  useEffect(() => {
-    fetchBudgets();
-  }, [monthYear]);
-
-  const fetchBudgets = async () => {
+  const fetchBudgets = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get(`/budgets?monthYear=${monthYear}`);
@@ -25,7 +21,11 @@ const BudgetList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [monthYear]);
+
+  useEffect(() => {
+    fetchBudgets();
+  }, [fetchBudgets]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this budget?')) return;

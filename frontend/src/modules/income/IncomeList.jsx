@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import { formatDate, getCurrentMonthYear } from '../../utils/helpers';
@@ -17,11 +17,7 @@ const IncomeList = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState(null);
 
-  useEffect(() => {
-    fetchIncomes();
-  }, [filters]);
-
-  const fetchIncomes = async () => {
+  const fetchIncomes = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -36,7 +32,11 @@ const IncomeList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchIncomes();
+  }, [fetchIncomes]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this income entry?')) return;

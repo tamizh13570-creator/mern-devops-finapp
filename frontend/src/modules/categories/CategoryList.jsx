@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../utils/api';
 
 const CategoryList = () => {
@@ -16,11 +16,7 @@ const CategoryList = () => {
 
   const emojiList = ['🍔', '🏠', '✈️', '🎬', '🏥', '🛍️', '🚗', '💡', '📚', '📦', '💰', '💻', '🏢', '📈', '🎁', '☕', '🎮', '🏋️', '⚡', '🐾'];
 
-  useEffect(() => {
-    fetchCategories();
-  }, [filterType]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get(`/categories?type=${filterType}`);
@@ -30,7 +26,11 @@ const CategoryList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterType]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const handleCreate = async (e) => {
     e.preventDefault();

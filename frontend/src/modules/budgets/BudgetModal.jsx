@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../utils/api';
 import { getCurrentMonthYear } from '../../utils/helpers';
 
@@ -13,9 +13,16 @@ const BudgetModal = ({ isOpen, onClose, onSuccess, initialBudget = null, default
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const fetchCategories = useCallback(async () => {
+    try {
+      const res = await api.get('/categories?type=expense');
+      setCategories(res.data.data || []);
+    } catch (err) {}
+  }, []);
+
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [fetchCategories]);
 
   useEffect(() => {
     if (initialBudget) {
@@ -34,16 +41,6 @@ const BudgetModal = ({ isOpen, onClose, onSuccess, initialBudget = null, default
       });
     }
   }, [initialBudget, defaultMonthYear, categories, isOpen]);
-
-  const fetchCategories = async () => {
-    try {
-      const res = await api.get('/categories?type=expense');
-      setCategories(res.data.data || []);
-      if (res.data.data?.length && !formData.category) {
-        setFormData((prev) => ({ ...prev, category: res.data.data[0]._id }));
-      }
-    } catch (err) {}
-  };
 
   if (!isOpen) return null;
 

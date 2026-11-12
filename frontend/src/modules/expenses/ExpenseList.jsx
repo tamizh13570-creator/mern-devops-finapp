@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import { formatDate, getCurrentMonthYear } from '../../utils/helpers';
@@ -18,22 +18,14 @@ const ExpenseList = ({ onOpenQuickAdd }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchExpenses();
-  }, [filters]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const res = await api.get('/categories?type=expense');
       setCategories(res.data.data || []);
     } catch (err) {}
-  };
+  }, []);
 
-  const fetchExpenses = async () => {
+  const fetchExpenses = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -49,7 +41,15 @@ const ExpenseList = ({ onOpenQuickAdd }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, [fetchExpenses]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this expense?')) return;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../utils/api';
 import { PAYMENT_METHODS } from '../../utils/constants';
 
@@ -16,9 +16,16 @@ const ExpenseModal = ({ isOpen, onClose, onSuccess, initialExpense = null }) => 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const fetchCategories = useCallback(async () => {
+    try {
+      const res = await api.get('/categories?type=expense');
+      setCategories(res.data.data || []);
+    } catch (err) {}
+  }, []);
+
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [fetchCategories]);
 
   useEffect(() => {
     if (initialExpense) {
@@ -42,16 +49,6 @@ const ExpenseModal = ({ isOpen, onClose, onSuccess, initialExpense = null }) => 
       setReceiptFile(null);
     }
   }, [initialExpense, categories, isOpen]);
-
-  const fetchCategories = async () => {
-    try {
-      const res = await api.get('/categories?type=expense');
-      setCategories(res.data.data || []);
-      if (res.data.data?.length && !formData.category) {
-        setFormData((prev) => ({ ...prev, category: res.data.data[0]._id }));
-      }
-    } catch (err) {}
-  };
 
   if (!isOpen) return null;
 
