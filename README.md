@@ -133,13 +133,13 @@ docker-compose up --build
 
 **### What Docker Compose Launches**
 1\. \`finapp-mongodb\` (MongoDB 7.0 database with persistent volume \`mongodb_data\`)
-2\. \`finapp-backend\` (Node.js API running on port \`5000\`)
+2\. \`finapp-backend\` (Node.js API on the private Compose network)
 3\. \`finapp-frontend\` (production Nginx server hosting the React app on port \`3000\`)
 
 **### Accessing the Dockerized Services**
 \- Web App (Frontend): [http://localhost:3000](http://localhost:3000)
-\- REST API (Backend): [http://localhost:5000/api/v1](http://localhost:5000/api/v1)
-\- API Health Check: [http://localhost:5000/api/v1/health](http://localhost:5000/api/v1/health)
+\- REST API (proxied through Nginx): [http://localhost:3000/api/v1](http://localhost:3000/api/v1)
+\- API Health Check: [http://localhost:3000/api/v1/health](http://localhost:3000/api/v1/health)
 
 **### Seed Sample Data in Docker**
 \`\`\`bash
@@ -152,6 +152,34 @@ docker-compose down
 \`\`\`
 
 \---
+
+**## 🚀 Continuous Deployment to AWS EC2**
+
+The \`.github/workflows/cd.yml\` workflow deploys to an Amazon Linux 2023 EC2 instance after the \`CI\` workflow succeeds on the latest commit to \`main\`.
+
+**### EC2 setup**
+1. Install and start Docker Engine and the Docker Compose plugin.
+2. Clone this repository into \`~/finapp\`, with the \`main\` branch checked out. The EC2 instance must be able to fetch the repository from GitHub.
+3. Create \`~/finapp/.env\` using [\.env.example](./.env.example), and replace the example values with production settings. Do not commit this file.
+4. Ensure the EC2 security group allows inbound SSH from the GitHub Actions runner strategy you use and inbound web traffic on port \`3000\`. Do not expose MongoDB credentials or the \`27017\` database port publicly.
+
+The Compose setup stores MongoDB data in the persistent \`mongodb_data\` Docker volume and uploaded receipts in \`uploads_data\`; redeploying containers does not remove either volume.
+
+**### GitHub Actions secrets**
+Add these repository secrets under **Settings → Secrets and variables → Actions**:
+
+| Secret | Value |
+|---|---|
+| \`EC2_HOST\` | EC2 public DNS name or IP address |
+| \`EC2_USER\` | EC2 SSH user (commonly \`ec2-user\`) |
+| \`EC2_SSH_KEY\` | Private SSH key authorized on the EC2 instance |
+| \`EC2_KNOWN_HOSTS\` | Verified SSH host-key line for the EC2 host |
+
+The EC2 SSH public key must be authorized for the chosen user. To create \`EC2_KNOWN_HOSTS\`, verify the instance host key through a trusted channel, then add the resulting known-hosts line as a secret. The workflow verifies the SSH host key rather than accepting unknown hosts.
+
+Set production application values only in \`~/finapp/.env\` on EC2. At minimum, set a unique strong \`JWT_SECRET\`; configure \`EMAIL_USER\` and \`EMAIL_PASS\` if email/OTP delivery is required. The workflow does not print or transfer application secrets.
+
+---
 
 **## 🛡️ Security & Privacy (DPDP / GDPR Compliance)**
 \- PIN and biometric-style lock protection in the app

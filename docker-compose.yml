@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ==========================================
   # 1. MongoDB Database Service
@@ -8,8 +6,6 @@ services:
     image: mongo:7.0
     container_name: finapp-mongodb
     restart: unless-stopped
-    ports:
-      - "27017:27017"
     environment:
       - MONGO_INITDB_DATABASE=finapp
     volumes:
@@ -32,15 +28,17 @@ services:
       dockerfile: Dockerfile
     container_name: finapp-backend
     restart: unless-stopped
-    ports:
-      - "5000:5000"
     environment:
-      - PORT=5000
-      - MONGODB_URI=mongodb://mongodb:27017/finapp
-      - JWT_SECRET=super_secret_finapp_jwt_key_2026_finance_tracker
-      - JWT_EXPIRE=7d
-      - NODE_ENV=production
-      - FRONTEND_URL=http://localhost:3000
+      PORT: 5000
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongodb:27017/finapp}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in the root .env file}
+      JWT_EXPIRE: ${JWT_EXPIRE:-7d}
+      EMAIL_HOST: ${EMAIL_HOST:-smtp.gmail.com}
+      EMAIL_PORT: ${EMAIL_PORT:-587}
+      EMAIL_USER: ${EMAIL_USER:-}
+      EMAIL_PASS: ${EMAIL_PASS:-}
+      NODE_ENV: ${NODE_ENV:-production}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
     depends_on:
       mongodb:
         condition: service_healthy
