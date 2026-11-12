@@ -159,8 +159,8 @@ The \`.github/workflows/cd.yml\` workflow deploys to an Amazon Linux 2023 EC2 in
 
 **### EC2 setup**
 1. Install and start Docker Engine and the Docker Compose plugin.
-2. Clone this repository into \`~/finapp\`, with the \`main\` branch checked out. The EC2 instance must be able to fetch the repository from GitHub.
-3. Create \`~/finapp/.env\` using [\.env.example](./.env.example), and replace the example values with production settings. Do not commit this file.
+2. Clone this repository into \`~/mern-devops-finapp\`, with the \`main\` branch checked out. The EC2 instance must be able to fetch the repository from GitHub.
+3. Create \`~/mern-devops-finapp/.env\` using [\.env.example](./.env.example), and replace the example values with production settings. Do not commit this file.
 4. Ensure the EC2 security group allows inbound SSH from the GitHub Actions runner strategy you use and inbound web traffic on port \`3000\`. Do not expose MongoDB credentials or the \`27017\` database port publicly.
 
 The Compose setup stores MongoDB data in the persistent \`mongodb_data\` Docker volume and uploaded receipts in \`uploads_data\`; redeploying containers does not remove either volume.
@@ -175,9 +175,11 @@ Add these repository secrets under **Settings → Secrets and variables → Acti
 | \`EC2_SSH_KEY\` | Private SSH key authorized on the EC2 instance |
 | \`EC2_KNOWN_HOSTS\` | Verified SSH host-key line for the EC2 host |
 
+For \`EC2_HOST\`, enter only the EC2 public IPv4 address or DNS name. Do not include \`https://\`, a port, a username, or whitespace. For \`EC2_USER\`, enter only the SSH login name, such as \`ec2-user\`.
+
 The EC2 SSH public key must be authorized for the chosen user. To create \`EC2_KNOWN_HOSTS\`, verify the instance host key through a trusted channel, then add the resulting known-hosts line as a secret. The workflow verifies the SSH host key rather than accepting unknown hosts.
 
-Set production application values only in \`~/finapp/.env\` on EC2. At minimum, set a unique strong \`JWT_SECRET\`; configure \`EMAIL_USER\` and \`EMAIL_PASS\` if email/OTP delivery is required. The workflow does not print or transfer application secrets.
+Set production application values only in \`~/mern-devops-finapp/.env\` on EC2. At minimum, set a unique strong \`JWT_SECRET\`; configure \`EMAIL_USER\` and \`EMAIL_PASS\` if email/OTP delivery is required. The workflow does not print or transfer application secrets.
 
 ---
 

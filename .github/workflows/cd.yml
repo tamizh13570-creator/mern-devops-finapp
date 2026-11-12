@@ -33,6 +33,21 @@ jobs:
             echo "deploy=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Validate EC2 SSH target
+        if: steps.current.outputs.deploy == 'true'
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          if [[ ! "$EC2_HOST" =~ ^[A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?$ ]]; then
+            echo "::error::EC2_HOST must contain only the EC2 public IPv4 address or DNS name; do not include a scheme, port, username, or whitespace."
+            exit 1
+          fi
+          if [[ ! "$EC2_USER" =~ ^[A-Za-z_][A-Za-z0-9_-]*$ ]]; then
+            echo "::error::EC2_USER must contain only the SSH login name, for example ec2-user; do not include the host."
+            exit 1
+          fi
+
       - name: Configure SSH
         if: steps.current.outputs.deploy == 'true'
         env:
