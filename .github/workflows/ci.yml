@@ -13,6 +13,17 @@ jobs:
   backend:
     name: Backend checks
     runs-on: ubuntu-latest
+    env:
+      PORT: ${{secrets.PORT}}
+      MONGODB_URI: ${{secrets.MONGODB_URI}}
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
+      JWT_EXPIRE: ${{secrets.JWT_EXPIRE}}
+      EMAIL_HOST: ${{secrets.EMAIL_HOST}}
+      EMAIL_PORT: ${{secrets.EMAIL_PORT}}
+      EMAIL_USER: ${{secrets.EMAIL_USER}}
+      EMAIL_PASS: ${{secrets.EMAIL_PASS}}
+      NODE_ENV: ${{secrets.NODE_ENV}}
+      FRONTEND_URL: ${{secrets.FRONTEND_URL}}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
