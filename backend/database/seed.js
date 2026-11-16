@@ -33,6 +33,17 @@ const adminUser = {
   isVerified: true,
 };
 
+const demoUser = {
+  name: 'Demo Guest',
+  email: 'demo@finapp.com',
+  phone: '9876543210',
+  password: 'DemoPass@123',
+  currency: 'INR',
+  isVerified: true,
+  isDemo: true,
+  role: 'demo',
+};
+
 const seed = async () => {
   try {
     await connectDB(true);
@@ -56,6 +67,20 @@ const seed = async () => {
       console.log(`✅ Admin user created: ${adminUser.email} / ${adminUser.password}`);
     } else {
       console.log(`⏭️  Admin user already exists`);
+    }
+
+    // Seed demo user
+    const existingDemo = await User.findOne({ email: demoUser.email });
+    if (!existingDemo) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(demoUser.password, salt);
+      const createdDemo = await User.create({ ...demoUser, password: hashedPassword });
+      console.log(`✅ Demo user created: ${demoUser.email} / ${demoUser.password}`);
+      const authService = require('../modules/auth/auth.service');
+      await authService.seedDemoDataIfEmpty(createdDemo._id);
+      console.log(`✅ Seeded sample records for Demo user`);
+    } else {
+      console.log(`⏭️  Demo user already exists`);
     }
 
     console.log('\n🎉 Seeding completed successfully!');

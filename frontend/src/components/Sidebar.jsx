@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = ({ showMobile, onCloseMobile }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const navItems = [
     { to: '/', label: 'Dashboard', icon: 'bi-grid-1x2-fill' },
@@ -19,12 +19,17 @@ const Sidebar = ({ showMobile, onCloseMobile }) => {
   return (
     <aside className={`sidebar ${showMobile ? 'show' : ''}`}>
       <div className="sidebar-brand">
-        <span className="fs-3">💰</span>
+        <span className="sidebar-brand-icon">💰</span>
         <div>
-          <div className="fw-bold tracking-tight">FinApp</div>
+          <div className="fw-bold tracking-tight sidebar-brand-title">FinApp</div>
           <div className="small text-muted fw-normal" style={{ fontSize: '0.7rem' }}>
             Smart Wealth Manager
           </div>
+          {user?.isDemo && (
+            <span className="badge bg-warning text-dark px-2 py-0 mt-1" style={{ fontSize: '0.62rem' }}>
+              DEMO (LIMITED)
+            </span>
+          )}
         </div>
       </div>
 

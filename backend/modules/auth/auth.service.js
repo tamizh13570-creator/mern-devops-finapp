@@ -31,8 +31,7 @@ class AuthService {
 
         return {
           user: existing.toPublicJSON(),
-          otp,
-          message: 'Account pending verification. A new OTP has been generated.',
+          message: 'Account pending verification. A new OTP has been sent to your email.',
         };
       }
 
@@ -56,7 +55,7 @@ class AuthService {
     storeOTP(normalizedEmail, otp);
     await sendOTPEmail(normalizedEmail, name, otp);
 
-    return { user: user.toPublicJSON(), otp };
+    return { user: user.toPublicJSON() };
   }
 
   async verifyOTPAndActivate({ email, otp }) {
@@ -173,7 +172,6 @@ class AuthService {
 
     return {
       message: 'Password reset OTP has been sent to your email.',
-      otp,
     };
   }
 
@@ -233,6 +231,12 @@ class AuthService {
       throw error;
     }
 
+    if (user.isDemo) {
+      const error = new Error('Action restricted: Password changes are disabled in Demo Mode.');
+      error.statusCode = 403;
+      throw error;
+    }
+
     if (!user.password) {
       const error = new Error('Password change not supported for Google accounts.');
       error.statusCode = 400;
@@ -250,6 +254,163 @@ class AuthService {
     await user.save();
 
     return { message: 'Password changed successfully.' };
+  }
+
+  async demoLogin() {
+    const demoEmail = 'demo@finapp.com';
+    let user = await User.findOne({ email: demoEmail });
+
+    if (!user) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('DemoPass@123', salt);
+      user = await User.create({
+        name: 'Demo Guest',
+        email: demoEmail,
+        password: hashedPassword,
+        phone: '9876543210',
+        currency: 'INR',
+        isVerified: true,
+        isDemo: true,
+        role: 'demo',
+        lastLogin: new Date(),
+      });
+    } else {
+      user.isDemo = true;
+      user.role = 'demo';
+      user.isVerified = true;
+      user.lastLogin = new Date();
+      await user.save({ validateBeforeSave: false });
+    }
+
+    // Seed realistic sample records if demo account has no data yet
+    await this.seedDemoDataIfEmpty(user._id);
+
+    const token = generateToken(user._id);
+    return { token, user: user.toPublicJSON() };
+  }
+
+  async seedDemoDataIfEmpty(userId) {
+    try {
+      const Expense = require('../expenses/expense.model');
+      const Income = require('../income/income.model');
+      const Budget = require('../budgets/budget.model');
+      const Category = require('../categories/category.model');
+      const { getCurrentMonthYear, toSmallestUnit } = require('../../utils/helpers');
+
+      const expenseCount = await Expense.countDocuments({ userId });
+      if (expenseCount > 0) return;
+
+      const monthYear = getCurrentMonthYear();
+      const categories = await Category.find({ isDefault: true });
+      const catMap = {};
+      categories.forEach((c) => {
+        catMap[c.name] = c._id;
+      });
+
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth();
+
+      // Seed 2 Income entries
+      await Income.create([
+        {
+          userId,
+          amount: toSmallestUnit(75000),
+          source: 'Salary',
+          date: new Date(y, m, 1),
+          note: 'Monthly Corporate Salary',
+          paymentMethod: 'bank_transfer',
+        },
+        {
+          userId,
+          amount: toSmallestUnit(12000),
+          source: 'Freelance',
+          date: new Date(y, m, 10),
+          note: 'UI Design Freelance Project',
+          paymentMethod: 'upi',
+        },
+      ]);
+
+      // Seed 6 realistic Expenses
+      await Expense.create([
+        {
+          userId,
+          amount: toSmallestUnit(22000),
+          category: catMap['Rent & Housing'] || categories[0]?._id,
+          date: new Date(y, m, 2),
+          note: 'Apartment Monthly Rent',
+          paymentMethod: 'netbanking',
+          tags: ['home', 'rent'],
+        },
+        {
+          userId,
+          amount: toSmallestUnit(4500),
+          category: catMap['Food & Dining'] || categories[0]?._id,
+          date: new Date(y, m, 4),
+          note: 'Supermarket Grocery Haul',
+          paymentMethod: 'upi',
+          tags: ['groceries', 'food'],
+        },
+        {
+          userId,
+          amount: toSmallestUnit(1850),
+          category: catMap['Food & Dining'] || categories[0]?._id,
+          date: new Date(y, m, 8),
+          note: 'Weekend Dining with Friends',
+          paymentMethod: 'card',
+          tags: ['dining', 'friends'],
+        },
+        {
+          userId,
+          amount: toSmallestUnit(2400),
+          category: catMap['Utilities'] || categories[0]?._id,
+          date: new Date(y, m, 6),
+          note: 'Electricity & Wifi Bill',
+          paymentMethod: 'upi',
+          tags: ['bills'],
+        },
+        {
+          userId,
+          amount: toSmallestUnit(1500),
+          category: catMap['Transport'] || categories[0]?._id,
+          date: new Date(y, m, 9),
+          note: 'Fuel & Cab Rides',
+          paymentMethod: 'cash',
+          tags: ['commute'],
+        },
+        {
+          userId,
+          amount: toSmallestUnit(1299),
+          category: catMap['Entertainment'] || categories[0]?._id,
+          date: new Date(y, m, 12),
+          note: 'Netflix & Spotify Subscriptions',
+          paymentMethod: 'card',
+          tags: ['subscription'],
+        },
+      ]);
+
+      // Seed 2 Budgets
+      if (catMap['Food & Dining']) {
+        await Budget.create({
+          userId,
+          category: catMap['Food & Dining'],
+          monthYear,
+          amount: toSmallestUnit(10000),
+          alertAt: 80,
+        });
+      }
+      if (catMap['Rent & Housing']) {
+        await Budget.create({
+          userId,
+          category: catMap['Rent & Housing'],
+          monthYear,
+          amount: toSmallestUnit(25000),
+          alertAt: 90,
+        });
+      }
+    } catch (err) {
+      console.warn('Demo seeding error (non-fatal):', err.message);
+    }
   }
 
   async resendOTP({ email }) {
@@ -278,7 +439,6 @@ class AuthService {
 
     return {
       message: 'A new OTP has been generated and sent to your email.',
-      otp,
     };
   }
 

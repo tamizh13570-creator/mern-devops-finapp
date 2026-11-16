@@ -48,13 +48,24 @@ const Register = () => {
 
   return (
     <div
-      className="d-flex align-items-center justify-content-center min-vh-100 py-5"
-      style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)' }}
+      className="d-flex align-items-center justify-content-center min-vh-100 py-5 p-3"
+      style={{ background: 'transparent' }}
     >
-      <div className="card border-0 shadow-lg p-4 p-md-5" style={{ width: '100%', maxWidth: '480px', borderRadius: '24px' }}>
+      <div
+        className="card border-0 shadow-lg p-4 p-md-5"
+        style={{
+          width: '100%',
+          maxWidth: '480px',
+          borderRadius: '28px',
+          background: 'rgba(16, 23, 42, 0.75)',
+          backdropFilter: 'blur(24px)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+        }}
+      >
         <div className="text-center mb-4">
-          <div className="fs-1 mb-2">🚀</div>
-          <h3 className="fw-bold text-dark">Create Account</h3>
+          <div className="fs-1 mb-2 sidebar-brand-icon">🚀</div>
+          <h3 className="fw-bold text-light">Create Account</h3>
           <p className="text-muted small">Start tracking your personal wealth with FinApp</p>
         </div>
 

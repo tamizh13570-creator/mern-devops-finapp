@@ -4,6 +4,27 @@ A modern, full-stack financial management web application built with HTML5, CSS3
 
 \---
 
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
+
 **## 🌟 Key Architecture & Modular Highlights**
 
 **### 1. Modular Directory Structure**
@@ -57,6 +78,27 @@ finapp/
 
 \---
 
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
+
 **## 📥 Dedicated Local Disk Download Module (Requirement 3)**
 
 The website includes a dedicated Reports & Local Disk Download Module (\`/reports\`):
@@ -68,6 +110,27 @@ The website includes a dedicated Reports & Local Disk Download Module (\`/report
 \- Live preview table to inspect expenses and income before saving
 
 \---
+
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
 
 **## 🚀 Getting Started**
 
@@ -96,6 +159,27 @@ npm run seed:backend
 
 \---
 
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
+
 **### 2. Start the Backend API**
 \`\`\`bash
 *# From the project root*
@@ -109,6 +193,27 @@ The REST API will start on: \`[http://localhost:5000/api/v1](http://localhost:50
 
 \---
 
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
+
 **### 3. Start the React Frontend**
 \`\`\`bash
 *# In a new terminal from the project root*
@@ -121,6 +226,27 @@ npm start
 The React app will open at: \`[http://localhost:3000](http://localhost:3000)\`
 
 \---
+
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
 
 **## 🐳 Docker & Docker Compose (Quick One-Command Setup)**
 
@@ -153,6 +279,27 @@ docker-compose down
 
 \---
 
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
+
 **## 🚀 Continuous Deployment to AWS EC2**
 
 The \`.github/workflows/cd.yml\` workflow deploys to an Amazon Linux 2023 EC2 instance after the \`CI\` workflow succeeds on the latest commit to \`main\`.
@@ -169,7 +316,49 @@ The Compose setup stores MongoDB data in the persistent \`mongodb_data\` Docker 
 Add these repository secrets under **Settings → Secrets and variables → Actions**:
 
 | Secret | Value |
-|---|---|
+|---
+
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---|---
+
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---|
 | \`EC2_HOST\` | EC2 public DNS name or IP address |
 | \`EC2_USER\` | EC2 SSH user (commonly \`ec2-user\`) |
 | \`EC2_SSH_KEY\` | Private SSH key authorized on the EC2 instance |
@@ -183,6 +372,27 @@ Set production application values only in \`~/mern-devops-finapp/.env\` on EC2. 
 
 ---
 
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
+
 **## 🛡️ Security & Privacy (DPDP / GDPR Compliance)**
 \- PIN and biometric-style lock protection in the app
 \- JWT-based authentication with HTTP authorization headers
@@ -190,6 +400,27 @@ Set production application values only in \`~/mern-devops-finapp/.env\` on EC2. 
 \- Self-hosted database and export/deletion features to support privacy control
 
 \---
+
+## 🎭 Demo User Mode & Limited Sandbox Restrictions
+
+FinApp includes an **Instant Demo User** access option directly on the Login page (`/login`):
+
+- **Zero-Friction Access**: Click **"Continue as Demo User"** — no registration, password, or OTP needed.
+- **Pre-populated Sample Data**: Instantly loads realistic current-month income (Salary, Freelance), expenses across multiple categories, and budget caps so all charts and reports work right away.
+
+### 🛡️ Demo User Limited Source of Use Cases:
+To ensure security and sandbox integrity, the Demo User account operates with explicit usage limits:
+1. **Expense Cap**: Up to a maximum of **15 expenses** (creating additional returns a 403 upgrade message).
+2. **Income Cap**: Up to **5 income streams**.
+3. **Budget Cap**: Up to **3 monthly category budgets**.
+4. **Custom Categories**: Up to **2 custom categories**; default system categories cannot be deleted.
+5. **Recurring Bills**: Up to **2 recurring subscription rules**.
+6. **Security & Governance Locked**:
+   - Password changes are disabled.
+   - Account deletion request is disabled.
+   - Persistent top banner indicates active Demo Mode with a direct link to register for an unlimited account.
+
+---
 
 **## 📌 Project Summary**
 This application is designed for personal finance management, budgeting, recurring expenses, reporting, and secure local export workflows for both end users and administrators.

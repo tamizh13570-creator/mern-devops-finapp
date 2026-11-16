@@ -50,7 +50,13 @@ const LockScreen = () => {
                   ? 'border-primary bg-primary'
                   : 'border-secondary'
               }`}
-              style={{ width: '16px', height: '16px', transition: 'all 0.2s' }}
+              style={{
+                width: '18px',
+                height: '18px',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: pin.length > idx ? '0 0 14px rgba(99, 102, 241, 0.85)' : 'none',
+                transform: pin.length > idx ? 'scale(1.2)' : 'scale(1)'
+              }}
             ></div>
           ))}
         </div>
@@ -63,7 +69,7 @@ const LockScreen = () => {
             <div key={num} className="col-4">
               <button
                 type="button"
-                className="btn btn-dark w-100 py-3 fs-4 fw-semibold border border-secondary border-opacity-50"
+                className="btn lock-keypad-btn w-100 py-3 fs-4 fw-semibold rounded-4"
                 onClick={() => handleDigit(String(num))}
               >
                 {num}
@@ -73,7 +79,7 @@ const LockScreen = () => {
           <div className="col-4">
             <button
               type="button"
-              className="btn btn-outline-info w-100 py-3 fs-5"
+              className="btn lock-keypad-btn w-100 py-3 fs-5 rounded-4 text-info"
               title="Biometric Fingerprint/Face Unlock"
               onClick={handleBiometric}
             >
@@ -83,7 +89,7 @@ const LockScreen = () => {
           <div className="col-4">
             <button
               type="button"
-              className="btn btn-dark w-100 py-3 fs-4 fw-semibold border border-secondary border-opacity-50"
+              className="btn lock-keypad-btn w-100 py-3 fs-4 fw-semibold rounded-4"
               onClick={() => handleDigit('0')}
             >
               0
@@ -92,7 +98,7 @@ const LockScreen = () => {
           <div className="col-4">
             <button
               type="button"
-              className="btn btn-outline-secondary w-100 py-3 fs-5"
+              className="btn lock-keypad-btn w-100 py-3 fs-5 rounded-4 text-muted"
               onClick={handleBackspace}
             >
               <i className="bi bi-backspace"></i>

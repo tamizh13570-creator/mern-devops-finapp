@@ -51,7 +51,7 @@ exports.getDashboardData = async (req, res, next) => {
           as: 'cat',
         },
       },
-      { $unwind: { path: '$cat', preserveNullAndEmpty: true } },
+      { $unwind: { path: '$cat', preserveNullAndEmptyArrays: true } },
       {
         $project: {
           categoryId: '$_id',
@@ -65,29 +65,48 @@ exports.getDashboardData = async (req, res, next) => {
       { $sort: { amount: -1 } },
     ]);
 
-    // 4. Last 6 Months Trend (Income vs Expense)
-    const monthlyTrends = [];
+    // 4. Last 6 Months Trend (Income vs Expense) — single aggregation per collection
     const now = new Date(startDate);
+    const trendStart = new Date(now.getFullYear(), now.getMonth() - 5, 1, 0, 0, 0, 0);
+    const trendEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    const [expenseTrend, incomeTrend] = await Promise.all([
+      Expense.aggregate([
+        { $match: { userId: userObjectId, date: { $gte: trendStart, $lte: trendEnd } } },
+        {
+          $group: {
+            _id: { year: { $year: '$date' }, month: { $month: '$date' } },
+            total: { $sum: '$amount' },
+          },
+        },
+      ]),
+      Income.aggregate([
+        { $match: { userId: userObjectId, date: { $gte: trendStart, $lte: trendEnd } } },
+        {
+          $group: {
+            _id: { year: { $year: '$date' }, month: { $month: '$date' } },
+            total: { $sum: '$amount' },
+          },
+        },
+      ]),
+    ]);
+
+    // Build lookup maps for O(1) access
+    const expenseMap = {};
+    expenseTrend.forEach((e) => { expenseMap[`${e._id.year}-${String(e._id.month).padStart(2, '0')}`] = e.total; });
+    const incomeMap = {};
+    incomeTrend.forEach((i) => { incomeMap[`${i._id.year}-${String(i._id.month).padStart(2, '0')}`] = i.total; });
+
+    const monthlyTrends = [];
     for (let i = 5; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const mYear = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-      const { startDate: mStart, endDate: mEnd } = parseMonthYear(mYear);
-
-      const mExp = await Expense.aggregate([
-        { $match: { userId: userObjectId, date: { $gte: mStart, $lte: mEnd } } },
-        { $group: { _id: null, total: { $sum: '$amount' } } },
-      ]);
-      const mInc = await Income.aggregate([
-        { $match: { userId: userObjectId, date: { $gte: mStart, $lte: mEnd } } },
-        { $group: { _id: null, total: { $sum: '$amount' } } },
-      ]);
-
       const monthName = d.toLocaleString('default', { month: 'short' });
       monthlyTrends.push({
         monthYear: mYear,
         month: `${monthName} ${d.getFullYear().toString().slice(-2)}`,
-        expense: fromSmallestUnit(mExp[0]?.total || 0),
-        income: fromSmallestUnit(mInc[0]?.total || 0),
+        expense: fromSmallestUnit(expenseMap[mYear] || 0),
+        income: fromSmallestUnit(incomeMap[mYear] || 0),
       });
     }
 

@@ -6,6 +6,17 @@ const { toSmallestUnit, fromSmallestUnit } = require('../../utils/helpers');
 
 class RecurringService {
   async createRecurring(userId, data) {
+    const User = require('../auth/auth.model');
+    const user = await User.findById(userId);
+    if (user && user.isDemo) {
+      const count = await Recurring.countDocuments({ userId });
+      if (count >= 2) {
+        const error = new Error('Demo Limit Reached: Demo accounts can schedule up to 2 recurring bills. Sign up for unlimited rules!');
+        error.statusCode = 403;
+        throw error;
+      }
+    }
+
     const nextDueDate = data.startDate ? new Date(data.startDate) : new Date();
 
     const recurring = await Recurring.create({

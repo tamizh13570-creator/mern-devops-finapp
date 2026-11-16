@@ -25,7 +25,7 @@ if (!fs.existsSync(uploadsDir)) {
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(
   cors({
-    origin: '*',
+    origin: config.frontendUrl || 'http://localhost:3000',
     credentials: true,
   })
 );

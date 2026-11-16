@@ -21,6 +21,17 @@ class CategoryService {
   }
 
   async createCategory(userId, data) {
+    const User = require('../auth/auth.model');
+    const user = await User.findById(userId);
+    if (user && user.isDemo) {
+      const count = await Category.countDocuments({ userId });
+      if (count >= 2) {
+        const error = new Error('Demo Limit Reached: Demo accounts can create up to 2 custom categories. Register for unlimited categories!');
+        error.statusCode = 403;
+        throw error;
+      }
+    }
+
     const existing = await Category.findOne({
       userId,
       name: { $regex: new RegExp(`^${data.name.trim()}$`, 'i') },
@@ -55,6 +66,14 @@ class CategoryService {
   }
 
   async deleteCategory(id, userId) {
+    const User = require('../auth/auth.model');
+    const user = await User.findById(userId);
+    if (user && user.isDemo) {
+      const error = new Error('Demo Restriction: Deleting categories is disabled in Demo Mode.');
+      error.statusCode = 403;
+      throw error;
+    }
+
     const category = await Category.findOne({ _id: id, userId });
     if (!category) {
       throw new Error('Category not found or default categories cannot be deleted.');

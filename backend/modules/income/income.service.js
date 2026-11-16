@@ -3,6 +3,17 @@ const { paginateQuery, buildSortObject, parseMonthYear, toSmallestUnit, fromSmal
 
 class IncomeService {
   async createIncome(userId, data) {
+    const User = require('../auth/auth.model');
+    const user = await User.findById(userId);
+    if (user && user.isDemo) {
+      const currentCount = await Income.countDocuments({ userId });
+      if (currentCount >= 5) {
+        const error = new Error('Demo Limit Reached: Demo users can record up to 5 income streams. Sign up for unlimited tracking!');
+        error.statusCode = 403;
+        throw error;
+      }
+    }
+
     const income = await Income.create({
       userId,
       amount: toSmallestUnit(data.amount),

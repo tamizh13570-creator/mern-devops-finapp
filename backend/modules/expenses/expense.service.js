@@ -5,6 +5,17 @@ const { paginateQuery, buildSortObject, parseMonthYear, toSmallestUnit, fromSmal
 
 class ExpenseService {
   async createExpense(userId, data) {
+    const User = require('../auth/auth.model');
+    const user = await User.findById(userId);
+    if (user && user.isDemo) {
+      const currentCount = await Expense.countDocuments({ userId });
+      if (currentCount >= 15) {
+        const error = new Error('Demo Limit Reached: Demo users can create up to 15 expenses. Sign up for a free unlimited account!');
+        error.statusCode = 403;
+        throw error;
+      }
+    }
+
     const expenseData = {
       userId,
       amount: toSmallestUnit(data.amount),
@@ -141,7 +152,7 @@ class ExpenseService {
           as: 'category',
         },
       },
-      { $unwind: { path: '$category', preserveNullAndEmpty: true } },
+      { $unwind: { path: '$category', preserveNullAndEmptyArrays: true } },
       {
         $project: {
           category: { _id: 1, name: 1, icon: 1, color: 1 },

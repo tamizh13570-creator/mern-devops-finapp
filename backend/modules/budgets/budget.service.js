@@ -18,6 +18,17 @@ class BudgetService {
       budget.alertAt = data.alertAt || budget.alertAt;
       await budget.save();
     } else {
+      const User = require('../auth/auth.model');
+      const user = await User.findById(userId);
+      if (user && user.isDemo) {
+        const count = await Budget.countDocuments({ userId });
+        if (count >= 3) {
+          const error = new Error('Demo Limit Reached: Demo users can configure up to 3 category budgets. Sign up for unlimited budgets!');
+          error.statusCode = 403;
+          throw error;
+        }
+      }
+
       budget = await Budget.create({
         userId,
         category: data.category,

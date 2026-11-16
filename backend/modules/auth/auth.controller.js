@@ -17,9 +17,8 @@ const register = async (req, res, next) => {
     const result = await authService.register({ name, email, phone, password });
     res.status(201).json({
       success: true,
-      message: result.message || 'Registration successful. Please verify with your OTP.',
-      data: result,
-      otp: result.otp,
+      message: result.message || 'Registration successful. Please check your email for the OTP.',
+      data: { user: result.user },
     });
   } catch (error) {
     next(error);
@@ -64,6 +63,19 @@ const googleLogin = async (req, res, next) => {
     }
     const result = await authService.googleLogin({ googleId, email, name, avatar });
     res.status(200).json({ success: true, message: 'Google login successful.', data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const demoLogin = async (req, res, next) => {
+  try {
+    const result = await authService.demoLogin();
+    res.status(200).json({
+      success: true,
+      message: 'Demo login successful. Welcome to FinApp in Demo Mode!',
+      data: result,
+    });
   } catch (error) {
     next(error);
   }
@@ -132,26 +144,8 @@ const resendOTP = async (req, res, next) => {
     const result = await authService.resendOTP({ email });
     res.status(200).json({
       success: true,
-      message: result.message || 'A new OTP has been generated successfully.',
-      data: result,
-      otp: result.otp,
+      message: result.message || 'A new OTP has been sent to your email.',
     });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getActiveOTP = async (req, res, next) => {
-  try {
-    const email = (req.query.email || req.body.email || '').toLowerCase().trim();
-    if (!email) {
-      return res.status(400).json({ success: false, message: 'Email is required.' });
-    }
-    const otp = authService.getActiveOTP(email);
-    if (!otp) {
-      return res.status(404).json({ success: false, message: 'No active OTP found. Please generate a new OTP.' });
-    }
-    res.status(200).json({ success: true, otp });
   } catch (error) {
     next(error);
   }
@@ -162,11 +156,11 @@ module.exports = {
   verifyOTP,
   login,
   googleLogin,
+  demoLogin,
   forgotPassword,
   resetPassword,
   getProfile,
   updateProfile,
   changePassword,
   resendOTP,
-  getActiveOTP,
 };

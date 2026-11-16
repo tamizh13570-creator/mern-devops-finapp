@@ -35,6 +35,16 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
+  const demoLogin = async () => {
+    const res = await api.post('/auth/demo-login');
+    const { token: receivedToken, user: receivedUser } = res.data.data;
+    localStorage.setItem('finapp_token', receivedToken);
+    localStorage.setItem('finapp_user', JSON.stringify(receivedUser));
+    setToken(receivedToken);
+    setUser(receivedUser);
+    return res.data;
+  };
+
   const register = async (userData) => {
     const res = await api.post('/auth/register', userData);
     return res.data;
@@ -43,15 +53,6 @@ export const AuthProvider = ({ children }) => {
   const resendOTP = async (email) => {
     const res = await api.post('/auth/resend-otp', { email });
     return res.data;
-  };
-
-  const getActiveOTP = async (email) => {
-    try {
-      const res = await api.get(`/auth/active-otp?email=${encodeURIComponent(email)}`);
-      return res.data;
-    } catch {
-      return null;
-    }
   };
 
   const verifyOTP = async (email, otp) => {
@@ -73,7 +74,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const unlockApp = (enteredPin) => {
-    if (enteredPin === appPin || enteredPin === '1234') {
+    if (appPin && enteredPin === appPin) {
       setIsLocked(false);
       return true;
     }
@@ -106,10 +107,10 @@ export const AuthProvider = ({ children }) => {
         isLocked,
         appPin,
         login,
+        demoLogin,
         register,
         verifyOTP,
         resendOTP,
-        getActiveOTP,
         logout,
         unlockApp,
         setSecurityPin,

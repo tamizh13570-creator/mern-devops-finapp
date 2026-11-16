@@ -30,7 +30,7 @@ const TrendChart = ({ data = [], height = 240 }) => {
     );
 
     // Draw horizontal grid lines
-    ctx.strokeStyle = '#f1f5f9';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
     ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
       const y = padding.top + (chartH / 4) * i;
@@ -54,7 +54,7 @@ const TrendChart = ({ data = [], height = 240 }) => {
       const groupX = padding.left + idx * barGroupWidth;
       const midX = groupX + barGroupWidth / 2;
 
-      // Income Bar (Green)
+      // Income Bar (Emerald)
       const incomeH = ((item.income || 0) / maxVal) * chartH;
       const incomeX = midX - barWidth - 3;
       const incomeY = padding.top + chartH - incomeH;
@@ -64,7 +64,7 @@ const TrendChart = ({ data = [], height = 240 }) => {
       ctx.roundRect(incomeX, incomeY, barWidth, incomeH, [4, 4, 0, 0]);
       ctx.fill();
 
-      // Expense Bar (Red)
+      // Expense Bar (Rose)
       const expenseH = ((item.expense || 0) / maxVal) * chartH;
       const expenseX = midX + 3;
       const expenseY = padding.top + chartH - expenseH;
@@ -75,8 +75,8 @@ const TrendChart = ({ data = [], height = 240 }) => {
       ctx.fill();
 
       // Month label
-      ctx.fillStyle = '#64748b';
-      ctx.font = '11px Plus Jakarta Sans, sans-serif';
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '500 11px Plus Jakarta Sans, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(item.month || item.monthYear, midX, h - 15);
     });

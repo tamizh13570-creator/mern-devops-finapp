@@ -36,6 +36,10 @@ const Settings = () => {
   };
 
   const handleDeleteAccount = async () => {
+    if (user?.isDemo) {
+      return alert('Action Restricted: Demo account cannot be deleted. Sign up for a personal account to manage data deletion.');
+    }
+
     if (
       !window.confirm(
         'CAUTION: Are you sure you want to permanently delete your account and all associated financial records? This action complies with privacy laws (DPDP/GDPR) and cannot be undone.'
@@ -170,9 +174,18 @@ const Settings = () => {
               data at any time.
             </p>
 
-            <button className="btn btn-danger rounded-pill px-4 fw-semibold" onClick={handleDeleteAccount}>
-              <i className="bi bi-trash3-fill me-2"></i> Request Complete Data & Account Deletion
-            </button>
+            {user?.isDemo ? (
+              <div className="d-flex align-items-center gap-2">
+                <button className="btn btn-secondary rounded-pill px-4 fw-semibold" disabled>
+                  <i className="bi bi-lock-fill me-2"></i> Account Deletion Locked in Demo Mode
+                </button>
+                <span className="small text-muted">Register to own and delete your data</span>
+              </div>
+            ) : (
+              <button className="btn btn-danger rounded-pill px-4 fw-semibold" onClick={handleDeleteAccount}>
+                <i className="bi bi-trash3-fill me-2"></i> Request Complete Data & Account Deletion
+              </button>
+            )}
           </div>
         </div>
       </div>

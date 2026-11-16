@@ -48,16 +48,16 @@ const PieChart = ({ data = [], height = 240 }) => {
       ctx.fillStyle = slice.color || '#4f46e5';
       ctx.fill();
 
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = 'rgba(11, 16, 29, 0.9)';
       ctx.stroke();
 
       startAngle = endAngle;
     });
 
     // Center text
-    ctx.fillStyle = '#1e293b';
-    ctx.font = 'bold 16px Plus Jakarta Sans, sans-serif';
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = '600 15px Plus Jakarta Sans, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(`${data.length} Categories`, centerX, centerY);
@@ -68,10 +68,20 @@ const PieChart = ({ data = [], height = 240 }) => {
       <canvas ref={canvasRef} width={280} height={height} />
       <div className="d-flex flex-wrap gap-2 justify-content-center mt-3" style={{ maxHeight: '90px', overflowY: 'auto' }}>
         {data.slice(0, 6).map((item, idx) => (
-          <div key={idx} className="badge bg-light text-dark border d-flex align-items-center gap-1 p-2">
+          <div
+            key={idx}
+            className="badge d-flex align-items-center gap-1 p-2"
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              color: '#f8fafc',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '10px',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
             <span
               className="d-inline-block rounded-circle"
-              style={{ width: '10px', height: '10px', backgroundColor: item.color || '#4f46e5' }}
+              style={{ width: '10px', height: '10px', backgroundColor: item.color || '#6366f1' }}
             ></span>
             <span>{item.name || item.icon}</span>
             <strong className="ms-1">₹{item.amount?.toLocaleString('en-IN') || item.totalInRupees || 0}</strong>

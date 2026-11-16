@@ -27,10 +27,10 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       // Token expired or invalid
       const currentPath = window.location.pathname;
-      if (currentPath !== '/login' && currentPath !== '/register' && currentPath !== '/verify-otp') {
+      if (currentPath !== '/login' && currentPath !== '/register' && currentPath !== '/verify-otp' && currentPath !== '/welcome' && currentPath !== '/') {
         localStorage.removeItem('finapp_token');
         localStorage.removeItem('finapp_user');
-        window.location.href = '/login';
+        window.location.href = '/welcome';
       }
     }
     return Promise.reject(error);

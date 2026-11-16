@@ -145,7 +145,7 @@ const Dashboard = ({ onOpenQuickAdd }) => {
           <div className="fin-card h-100">
             <div className="fin-card-header">
               <h5 className="fw-bold mb-0">Expense Breakdown</h5>
-              <span className="badge bg-light text-muted border">{getMonthName(monthYear)}</span>
+              <span className="badge border" style={{ background: 'rgba(255,255,255,0.06)', color: '#cbd5e1', borderColor: 'rgba(255,255,255,0.12)' }}>{getMonthName(monthYear)}</span>
             </div>
             <PieChart data={data?.categoryBreakdown || []} height={230} />
           </div>
@@ -156,7 +156,7 @@ const Dashboard = ({ onOpenQuickAdd }) => {
           <div className="fin-card h-100">
             <div className="fin-card-header">
               <h5 className="fw-bold mb-0">Income vs Expense Trend</h5>
-              <span className="badge bg-light text-muted border">Last 6 Months</span>
+              <span className="badge border" style={{ background: 'rgba(255,255,255,0.06)', color: '#cbd5e1', borderColor: 'rgba(255,255,255,0.12)' }}>Last 6 Months</span>
             </div>
             <TrendChart data={data?.monthlyTrends || []} height={230} />
           </div>
@@ -232,17 +232,23 @@ const Dashboard = ({ onOpenQuickAdd }) => {
                 {data.recentTransactions.map((tx) => (
                   <div
                     key={tx._id}
-                    className="p-2 px-3 rounded-3 d-flex justify-content-between align-items-center bg-light bg-opacity-50"
+                    className="p-2 px-3 rounded-3 d-flex justify-content-between align-items-center"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.035)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)',
+                      backdropFilter: 'blur(8px)',
+                      transition: 'transform 0.2s ease, background 0.2s ease'
+                    }}
                   >
                     <div className="d-flex align-items-center gap-3">
                       <div
                         className="rounded-circle d-flex align-items-center justify-content-center"
-                        style={{ width: '38px', height: '38px', backgroundColor: '#e2e8f0', fontSize: '1.2rem' }}
+                        style={{ width: '40px', height: '40px', backgroundColor: 'rgba(255, 255, 255, 0.08)', fontSize: '1.2rem', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                       >
                         {tx.icon}
                       </div>
                       <div>
-                        <div className="fw-semibold text-dark small">{tx.title}</div>
+                        <div className="fw-semibold text-light small">{tx.title}</div>
                         <div className="text-muted" style={{ fontSize: '0.75rem' }}>
                           {new Date(tx.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} • {tx.subtitle}
                         </div>

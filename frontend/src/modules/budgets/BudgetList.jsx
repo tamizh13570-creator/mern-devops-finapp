@@ -82,11 +82,11 @@ const BudgetList = () => {
       </div>
 
       {/* Top Overview Progress Card */}
-      <div className="fin-card mb-4 bg-light bg-opacity-50">
+      <div className="fin-card mb-4">
         <div className="row align-items-center">
           <div className="col-12 col-md-4 mb-3 mb-md-0">
             <div className="small text-muted text-uppercase fw-semibold">Overall Budget Status</div>
-            <div className="fs-3 fw-bold text-dark mt-1">
+            <div className="fs-3 fw-bold text-light mt-1">
               ₹{totalSpent.toLocaleString('en-IN')} <span className="fs-6 fw-normal text-muted">/ ₹{totalBudget.toLocaleString('en-IN')}</span>
             </div>
           </div>
@@ -105,7 +105,10 @@ const BudgetList = () => {
             </div>
           </div>
           <div className="col-12 col-md-3 text-md-end">
-            <span className="badge bg-white text-secondary border px-3 py-2 rounded-pill small">
+            <span
+              className="badge border px-3 py-2 rounded-pill small"
+              style={{ background: 'rgba(255, 255, 255, 0.06)', color: '#cbd5e1', borderColor: 'rgba(255, 255, 255, 0.12)' }}
+            >
               {budgets.length} Categories Configured
             </span>
           </div>

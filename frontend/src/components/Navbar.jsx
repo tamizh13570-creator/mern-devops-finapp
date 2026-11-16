@@ -43,6 +43,11 @@ const Navbar = ({ onToggleMobile, onOpenQuickAdd }) => {
         </button>
         <span className="fw-semibold text-muted d-none d-sm-inline">
           Welcome back, <strong className="text-dark">{user?.name || 'User'}</strong> 👋
+          {user?.isDemo && (
+            <span className="badge bg-warning text-dark ms-2 fw-semibold" style={{ fontSize: '0.7rem' }}>
+              DEMO
+            </span>
+          )}
         </span>
       </div>
 
@@ -59,16 +64,17 @@ const Navbar = ({ onToggleMobile, onOpenQuickAdd }) => {
         {/* Notifications Dropdown */}
         <div className="dropdown position-relative">
           <button
-            className="btn btn-light position-relative rounded-circle p-2"
+            className="btn btn-light position-relative rounded-circle p-2 d-flex align-items-center justify-content-center"
             onClick={() => {
               setShowDropdown(!showDropdown);
               if (!showDropdown && unreadCount > 0) markAllAsRead();
             }}
-            style={{ width: '42px', height: '42px' }}
+            style={{ width: '42px', height: '42px', border: '1px solid rgba(255,255,255,0.15)' }}
+            aria-label="Notifications"
           >
-            <i className="bi bi-bell-fill text-secondary"></i>
+            <i className="bi bi-bell-fill text-light"></i>
             {unreadCount > 0 && (
-              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
                 {unreadCount}
               </span>
             )}
@@ -76,18 +82,18 @@ const Navbar = ({ onToggleMobile, onOpenQuickAdd }) => {
 
           {showDropdown && (
             <div
-              className="dropdown-menu dropdown-menu-end show p-0 shadow-lg border-0"
+              className="dropdown-menu dropdown-menu-end show p-0 shadow-lg"
               style={{
                 width: '320px',
                 position: 'absolute',
-                top: '50px',
+                top: '52px',
                 right: '0',
-                borderRadius: '16px',
+                borderRadius: '18px',
                 zIndex: 1050,
               }}
             >
-              <div className="p-3 bg-light border-bottom d-flex justify-content-between align-items-center rounded-top-4">
-                <span className="fw-bold">Notifications</span>
+              <div className="p-3 border-bottom d-flex justify-content-between align-items-center rounded-top-4" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)' }}>
+                <span className="fw-bold text-light">Notifications</span>
                 {unreadCount > 0 && (
                   <span className="badge bg-danger rounded-pill">{unreadCount} new</span>
                 )}
@@ -102,9 +108,10 @@ const Navbar = ({ onToggleMobile, onOpenQuickAdd }) => {
                   notifications.map((n) => (
                     <div
                       key={n._id}
-                      className={`p-3 border-bottom ${!n.isRead ? 'bg-light bg-opacity-75' : ''}`}
+                      className={`p-3 border-bottom ${!n.isRead ? 'bg-primary bg-opacity-10' : ''}`}
+                      style={{ borderColor: 'rgba(255,255,255,0.06)' }}
                     >
-                      <div className="fw-semibold small text-dark">{n.title}</div>
+                      <div className="fw-semibold small text-light">{n.title}</div>
                       <div className="small text-muted">{n.message}</div>
                       <div className="text-end text-muted" style={{ fontSize: '0.7rem' }}>
                         {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -120,8 +127,17 @@ const Navbar = ({ onToggleMobile, onOpenQuickAdd }) => {
         {/* User Avatar */}
         <div className="d-flex align-items-center gap-2">
           <div
-            className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
-            style={{ width: '40px', height: '40px', fontSize: '1rem' }}
+            className="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold"
+            style={{
+              width: '42px',
+              height: '42px',
+              fontSize: '1rem',
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              boxShadow: '0 0 16px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255,255,255,0.4)',
+              border: '2px solid rgba(255, 255, 255, 0.25)',
+              transition: 'transform 0.25s ease',
+              cursor: 'pointer'
+            }}
           >
             {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>

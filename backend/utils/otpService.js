@@ -27,7 +27,7 @@ const generateOTP = () => {
 const storeOTP = (key, otp) => {
   const normalizedKey = String(key).toLowerCase().trim();
   const cleanOtp = String(otp).trim();
-  console.log(`\n🔑 [OTP GENERATED] for ${normalizedKey}: ${cleanOtp}\n`);
+  // OTP value intentionally not logged for security
   otpStore.set(normalizedKey, {
     otp: cleanOtp,
     expiry: Date.now() + config.otpExpiry,

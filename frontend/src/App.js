@@ -7,9 +7,11 @@ import './App.css';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import LockScreen from './components/LockScreen';
+import DemoBanner from './components/DemoBanner';
 import ExpenseModal from './modules/expenses/ExpenseModal';
 
 // Auth Pages
+import Welcome from './modules/auth/Welcome';
 import Login from './modules/auth/Login';
 import Register from './modules/auth/Register';
 import VerifyOTP from './modules/auth/VerifyOTP';
@@ -32,14 +34,15 @@ const ProtectedLayout = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-        <div className="spinner-border text-primary" role="status"></div>
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100" style={{ background: 'transparent' }}>
+        <div className="spinner-border text-primary mb-3" style={{ width: '3rem', height: '3rem', borderWidth: '3px' }} role="status"></div>
+        <div className="text-muted small fw-medium">Loading FinApp...</div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/welcome" replace />;
   }
 
   if (isLocked) {
@@ -57,6 +60,7 @@ const ProtectedLayout = ({ children }) => {
 
       {/* Main Content */}
       <div className="main-wrapper">
+        <DemoBanner />
         <Navbar
           onToggleMobile={() => setMobileMenuOpen(!mobileMenuOpen)}
           onOpenQuickAdd={() => setQuickAddOpen(true)}
@@ -91,14 +95,21 @@ function AppRoutes() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-        <div className="spinner-border text-primary" role="status"></div>
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100" style={{ background: 'transparent' }}>
+        <div className="spinner-border text-primary mb-3" style={{ width: '3rem', height: '3rem', borderWidth: '3px' }} role="status"></div>
+        <div className="text-muted small fw-medium">Loading FinApp...</div>
       </div>
     );
   }
 
   return (
     <Routes>
+      {/* Landing Portal with 3-Second Cool Intro & Login Panel */}
+      <Route
+        path="/welcome"
+        element={isAuthenticated ? <Navigate to="/" replace /> : <Welcome />}
+      />
+
       {/* Public Auth Routes */}
       <Route
         path="/login"
@@ -113,13 +124,17 @@ function AppRoutes() {
         element={isAuthenticated ? <Navigate to="/" replace /> : <VerifyOTP />}
       />
 
-      {/* Protected App Routes */}
+      {/* Main Home Route: Dashboard if logged in, else Welcome */}
       <Route
         path="/"
         element={
-          <ProtectedLayout>
-            <Dashboard />
-          </ProtectedLayout>
+          isAuthenticated ? (
+            <ProtectedLayout>
+              <Dashboard />
+            </ProtectedLayout>
+          ) : (
+            <Welcome />
+          )
         }
       />
       <Route
@@ -189,6 +204,12 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+        <div className="ambient-background" aria-hidden="true">
+          <div className="ambient-orb orb-1"></div>
+          <div className="ambient-orb orb-2"></div>
+          <div className="ambient-orb orb-3"></div>
+          <div className="ambient-orb orb-4"></div>
+        </div>
         <AppRoutes />
       </AuthProvider>
     </Router>
