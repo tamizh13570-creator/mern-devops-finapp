@@ -71,13 +71,13 @@ const ExpenseList = ({ onOpenQuickAdd }) => {
   return (
     <div>
       {/* Header */}
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4 flex-wrap">
         <div>
           <h2 className="fw-bold mb-1">Expenses</h2>
           <p className="text-muted mb-0">Record, filter, and track all your outgoings</p>
         </div>
 
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex align-items-center gap-2 flex-wrap">
           {/* Download Module Link */}
           <Link
             to={`/reports?monthYear=${filters.monthYear}`}
@@ -152,7 +152,7 @@ const ExpenseList = ({ onOpenQuickAdd }) => {
         </div>
       </div>
 
-      {/* Expenses Table */}
+      {/* Expenses Table + Mobile Cards */}
       <div className="fin-card">
         {loading ? (
           <div className="text-center py-5">
@@ -173,71 +173,139 @@ const ExpenseList = ({ onOpenQuickAdd }) => {
             </button>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table className="table table-hover align-middle">
-              <thead className="table-light">
-                <tr>
-                  <th>Category</th>
-                  <th>Note & Tags</th>
-                  <th>Date</th>
-                  <th>Payment Method</th>
-                  <th className="text-end">Amount</th>
-                  <th className="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenses.map((exp) => (
-                  <tr key={exp._id}>
-                    <td>
-                      <div className="d-flex align-items-center gap-2">
-                        <span className="fs-5">{exp.category?.icon || '🏷️'}</span>
-                        <span className="fw-semibold text-dark">{exp.category?.name || 'General'}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="fw-normal text-dark">{exp.note || '-'}</div>
-                      {exp.tags?.length > 0 && (
-                        <div className="d-flex gap-1 mt-1">
-                          {exp.tags.map((t, i) => (
-                            <span key={i} className="badge bg-light text-secondary border" style={{ fontSize: '0.65rem' }}>
-                              #{t}
-                            </span>
-                          ))}
+          <>
+            {/* Desktop Table — hidden on mobile */}
+            <div className="d-none d-md-block">
+              <div className="table-responsive">
+                <table className="table table-hover align-middle">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Category</th>
+                      <th>Note &amp; Tags</th>
+                      <th>Date</th>
+                      <th>Payment Method</th>
+                      <th className="text-end">Amount</th>
+                      <th className="text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expenses.map((exp) => (
+                      <tr key={exp._id}>
+                        <td>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="fs-5">{exp.category?.icon || '🏷️'}</span>
+                            <span className="fw-semibold text-dark">{exp.category?.name || 'General'}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="fw-normal text-dark">{exp.note || '-'}</div>
+                          {exp.tags?.length > 0 && (
+                            <div className="d-flex gap-1 mt-1">
+                              {exp.tags.map((t, i) => (
+                                <span key={i} className="badge bg-light text-secondary border" style={{ fontSize: '0.65rem' }}>
+                                  #{t}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </td>
+                        <td className="text-muted small">{formatDate(exp.date)}</td>
+                        <td>
+                          <span className="badge bg-light text-dark text-capitalize border">
+                            {exp.paymentMethod}
+                          </span>
+                        </td>
+                        <td className="text-end fw-bold text-danger fs-6">
+                          -₹{exp.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </td>
+                        <td className="text-end">
+                          <div className="btn-group btn-group-sm">
+                            <button
+                              className="btn btn-outline-secondary"
+                              onClick={() => handleEdit(exp)}
+                              title="Edit"
+                            >
+                              <i className="bi bi-pencil"></i>
+                            </button>
+                            <button
+                              className="btn btn-outline-danger"
+                              onClick={() => handleDelete(exp._id)}
+                              title="Delete"
+                            >
+                              <i className="bi bi-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Card List — hidden on tablet+ */}
+            <div className="d-md-none d-flex flex-column gap-2">
+              {expenses.map((exp) => (
+                <div
+                  key={exp._id}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '14px',
+                    padding: '14px',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="fs-4">{exp.category?.icon || '🏷️'}</span>
+                      <div>
+                        <div className="fw-semibold text-light small">{exp.category?.name || 'General'}</div>
+                        <div className="text-muted" style={{ fontSize: '0.72rem' }}>
+                          {exp.note || '-'} • {formatDate(exp.date)}
                         </div>
-                      )}
-                    </td>
-                    <td className="text-muted small">{formatDate(exp.date)}</td>
-                    <td>
-                      <span className="badge bg-light text-dark text-capitalize border">
-                        {exp.paymentMethod}
+                        {exp.tags?.length > 0 && (
+                          <div className="d-flex gap-1 mt-1 flex-wrap">
+                            {exp.tags.map((t, i) => (
+                              <span key={i} className="badge bg-light text-secondary border" style={{ fontSize: '0.6rem' }}>
+                                #{t}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <div className="text-muted" style={{ fontSize: '0.68rem' }}>
+                          <span className="badge bg-light text-dark text-capitalize border" style={{ fontSize: '0.65rem' }}>
+                            {exp.paymentMethod}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-column align-items-end gap-1">
+                      <span className="fw-bold text-danger small">
+                        -₹{exp.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                       </span>
-                    </td>
-                    <td className="text-end fw-bold text-danger fs-6">
-                      -₹{exp.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group btn-group-sm">
+                      <div className="d-flex gap-1">
                         <button
-                          className="btn btn-outline-secondary"
+                          className="btn btn-sm btn-outline-secondary p-1"
                           onClick={() => handleEdit(exp)}
-                          title="Edit"
+                          style={{ minHeight: '32px', minWidth: '32px' }}
                         >
                           <i className="bi bi-pencil"></i>
                         </button>
                         <button
-                          className="btn btn-outline-danger"
+                          className="btn btn-sm btn-outline-danger p-1"
                           onClick={() => handleDelete(exp._id)}
-                          title="Delete"
+                          style={{ minHeight: '32px', minWidth: '32px' }}
                         >
                           <i className="bi bi-trash"></i>
                         </button>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 

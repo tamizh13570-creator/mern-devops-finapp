@@ -6,26 +6,50 @@ let transporter = null;
 const getTransporter = () => {
   if (transporter) return transporter;
 
-  transporter = nodemailer.createTransport({
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.port === 465,
-    auth: {
-      user: config.email.user,
-      pass: config.email.pass,
-    },
-    tls: {
-      rejectUnauthorized: config.nodeEnv === 'production',
-    },
-  });
+  const isGmail = (config.email.host || '').includes('gmail.com');
+  const transportOptions = isGmail
+    ? {
+        service: 'gmail',
+        auth: {
+          user: config.email.user,
+          pass: config.email.pass,
+        },
+      }
+    : {
+        host: config.email.host,
+        port: config.email.port,
+        secure: config.email.port === 465,
+        auth: {
+          user: config.email.user,
+          pass: config.email.pass,
+        },
+        tls: {
+          rejectUnauthorized: config.nodeEnv === 'production',
+        },
+      };
 
+  transporter = nodemailer.createTransport(transportOptions);
   return transporter;
 };
 
 const sendEmail = async ({ to, subject, html, text }) => {
-  if (!config.email.user || !config.email.pass) {
-    console.warn('Email credentials not configured. Skipping email send.');
-    return { success: false, message: 'Email not configured' };
+  const isDummyUser =
+    !config.email.user ||
+    config.email.user === 'demo@finapp.com' ||
+    config.email.user.includes('example.com') ||
+    config.email.user.includes('your_email');
+  const isDummyPass =
+    !config.email.pass ||
+    config.email.pass === 'demopassword' ||
+    config.email.pass.includes('your_app_password');
+
+  if (isDummyUser || isDummyPass) {
+    console.warn(`\n[Email Service - Simulated Mode]`);
+    console.warn(`⚠️ Real SMTP credentials not configured (current user: "${config.email.user || 'None'}").`);
+    console.log(`📩 Simulated Email to: ${to}`);
+    console.log(`📌 Subject: ${subject}`);
+    console.log(`🔑 Message: ${text}\n`);
+    return { success: false, simulated: true, message: 'SMTP credentials are demo placeholders' };
   }
 
   try {
@@ -38,10 +62,10 @@ const sendEmail = async ({ to, subject, html, text }) => {
       html,
     });
 
-    console.log(`Email sent to ${to}: ${info.messageId}`);
+    console.log(`[Email Service] Live email sent to ${to}: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Email send failed:', error.message);
+    console.error(`[Email Service] Live email send failed to ${to}:`, error.message);
     return { success: false, error: error.message };
   }
 };

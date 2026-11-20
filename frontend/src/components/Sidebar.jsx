@@ -1,9 +1,11 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const Sidebar = ({ showMobile, onCloseMobile }) => {
+const Sidebar = ({ isOpen, showMobile, onClose, onCloseMobile }) => {
   const { logout, user } = useAuth();
+  const isVisible = isOpen ?? showMobile ?? false;
+  const handleClose = onClose || onCloseMobile;
 
   const navItems = [
     { to: '/', label: 'Dashboard', icon: 'bi-grid-1x2-fill' },
@@ -17,8 +19,19 @@ const Sidebar = ({ showMobile, onCloseMobile }) => {
   ];
 
   return (
-    <aside className={`sidebar ${showMobile ? 'show' : ''}`}>
-      <div className="sidebar-brand">
+    <aside className={`sidebar ${isVisible ? 'show' : ''}`}>
+      {/* Prominent Close Button to close this tab */}
+      <button
+        type="button"
+        className="sidebar-close-btn"
+        onClick={handleClose}
+        aria-label="Close sidebar"
+        title="Close this menu"
+      >
+        <i className="bi bi-x-lg"></i>
+      </button>
+
+      <Link to="/" className="sidebar-brand text-decoration-none" onClick={handleClose}>
         <span className="sidebar-brand-icon">💰</span>
         <div>
           <div className="fw-bold tracking-tight sidebar-brand-title">FinApp</div>
@@ -31,7 +44,7 @@ const Sidebar = ({ showMobile, onCloseMobile }) => {
             </span>
           )}
         </div>
-      </div>
+      </Link>
 
       <nav className="sidebar-nav">
         {navItems.map((item) => (
@@ -40,7 +53,7 @@ const Sidebar = ({ showMobile, onCloseMobile }) => {
             to={item.to}
             end={item.to === '/'}
             className={({ isActive }) => `nav-item-link ${isActive ? 'active' : ''}`}
-            onClick={onCloseMobile}
+            onClick={handleClose}
           >
             <i className={`bi ${item.icon}`}></i>
             <span className="flex-grow-1">{item.label}</span>
@@ -56,7 +69,10 @@ const Sidebar = ({ showMobile, onCloseMobile }) => {
       <div className="p-3 border-top border-secondary border-opacity-25">
         <button
           className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2"
-          onClick={logout}
+          onClick={() => {
+            if (handleClose) handleClose();
+            logout();
+          }}
         >
           <i className="bi bi-box-arrow-right"></i>
           <span>Sign Out</span>

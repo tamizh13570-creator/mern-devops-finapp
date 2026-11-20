@@ -18,6 +18,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   min-height: 100vh;
+  /* Respect safe-area insets for notched devices */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 code {
@@ -27,6 +30,12 @@ code {
 ::selection {
   background: rgba(99, 102, 241, 0.45);
   color: #ffffff;
+}
+
+/* Improve tap responsiveness on mobile */
+a, button, [role="button"] {
+  -webkit-tap-highlight-color: rgba(99, 102, 241, 0.2);
+  touch-action: manipulation;
 }
 
 /* Ultra-Smooth Glass Scrollbar */
@@ -50,4 +59,20 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(99, 102, 241, 0.6);
   background-clip: padding-box;
+}
+
+/* On mobile, use thinner scrollbar */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+/* Safe area padding for bottom nav on notched devices */
+@media (max-width: 991.98px) {
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(64px + env(safe-area-inset-bottom));
+  }
 }

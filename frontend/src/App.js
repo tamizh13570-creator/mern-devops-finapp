@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, NavLink } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 
@@ -26,9 +26,34 @@ import RecurringList from './modules/recurring/RecurringList';
 import Reports from './modules/reports/Reports';
 import Settings from './modules/settings/Settings';
 
+const MobileBottomNav = ({ onOpenSidebar }) => (
+  <nav className="mobile-bottom-nav">
+    <NavLink to="/" end className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+      <i className="bi bi-grid-1x2-fill"></i>
+      <span>Dashboard</span>
+    </NavLink>
+    <NavLink to="/expenses" className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+      <i className="bi bi-wallet2"></i>
+      <span>Expenses</span>
+    </NavLink>
+    <NavLink to="/income" className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+      <i className="bi bi-cash-coin"></i>
+      <span>Income</span>
+    </NavLink>
+    <NavLink to="/budgets" className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+      <i className="bi bi-pie-chart-fill"></i>
+      <span>Budgets</span>
+    </NavLink>
+    <button className="mobile-nav-item" onClick={onOpenSidebar}>
+      <i className="bi bi-three-dots"></i>
+      <span>More</span>
+    </button>
+  </nav>
+);
+
 const ProtectedLayout = ({ children }) => {
   const { isAuthenticated, loading, isLocked } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -55,14 +80,19 @@ const ProtectedLayout = ({ children }) => {
 
   return (
     <div className="app-container">
-      {/* Sidebar */}
-      <Sidebar showMobile={mobileMenuOpen} onCloseMobile={() => setMobileMenuOpen(false)} />
+      {/* Sidebar overlay backdrop: closes sidebar when clicked outside */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+      )}
 
-      {/* Main Content */}
+      {/* Sidebar: closed first, opens completely when Dashboard button is clicked */}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Main Content: full width */}
       <div className="main-wrapper">
         <DemoBanner />
         <Navbar
-          onToggleMobile={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
           onOpenQuickAdd={() => setQuickAddOpen(true)}
         />
 
@@ -86,6 +116,9 @@ const ProtectedLayout = ({ children }) => {
         onClose={() => setQuickAddOpen(false)}
         onSuccess={handleQuickAddSuccess}
       />
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav onOpenSidebar={() => setSidebarOpen(true)} />
     </div>
   );
 };

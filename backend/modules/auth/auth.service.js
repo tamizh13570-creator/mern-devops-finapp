@@ -27,11 +27,15 @@ class AuthService {
         await existing.save();
 
         storeOTP(normalizedEmail, otp);
-        await sendOTPEmail(normalizedEmail, name, otp);
+        const emailResult = await sendOTPEmail(normalizedEmail, name, otp);
 
         return {
           user: existing.toPublicJSON(),
-          message: 'Account pending verification. A new OTP has been sent to your email.',
+          otp,
+          emailSent: emailResult.success,
+          message: emailResult.success
+            ? 'Account pending verification. A new OTP has been sent to your email.'
+            : 'Account pending verification. Your verification OTP is ready.',
         };
       }
 
@@ -53,9 +57,16 @@ class AuthService {
     await user.save();
 
     storeOTP(normalizedEmail, otp);
-    await sendOTPEmail(normalizedEmail, name, otp);
+    const emailResult = await sendOTPEmail(normalizedEmail, name, otp);
 
-    return { user: user.toPublicJSON() };
+    return {
+      user: user.toPublicJSON(),
+      otp,
+      emailSent: emailResult.success,
+      message: emailResult.success
+        ? 'Registration successful! A verification OTP has been sent to your email.'
+        : 'Registration successful! Your verification OTP is ready.',
+    };
   }
 
   async verifyOTPAndActivate({ email, otp }) {
@@ -435,16 +446,27 @@ class AuthService {
     await user.save({ validateBeforeSave: false });
 
     storeOTP(normalizedEmail, otp);
-    await sendOTPEmail(normalizedEmail, user.name, otp);
+    const emailResult = await sendOTPEmail(normalizedEmail, user.name, otp);
 
     return {
-      message: 'A new OTP has been generated and sent to your email.',
+      otp,
+      emailSent: emailResult.success,
+      message: emailResult.success
+        ? 'A new OTP has been sent to your email.'
+        : 'A new OTP has been generated successfully.',
     };
   }
 
-  getActiveOTP(email) {
+  async getActiveOTP(email) {
     const normalizedEmail = String(email || '').toLowerCase().trim();
-    return getActiveOTP(normalizedEmail);
+    let otp = getActiveOTP(normalizedEmail);
+    if (!otp) {
+      const user = await User.findOne({ email: normalizedEmail }).select('+otp +otpExpiry');
+      if (user && user.otp && (!user.otpExpiry || new Date() <= user.otpExpiry)) {
+        otp = user.otp;
+      }
+    }
+    return otp;
   }
 }
 

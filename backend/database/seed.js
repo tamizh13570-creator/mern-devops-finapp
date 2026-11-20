@@ -5,7 +5,6 @@ const { connectDB, disconnectDB } = require('./connection');
 
 const Category = require('../modules/categories/category.model');
 const User = require('../modules/auth/auth.model');
-
 const defaultCategories = [
   { name: 'Food & Dining', icon: '🍔', color: '#FF6B6B', type: 'expense', isDefault: true },
   { name: 'Rent & Housing', icon: '🏠', color: '#4ECDC4', type: 'expense', isDefault: true },

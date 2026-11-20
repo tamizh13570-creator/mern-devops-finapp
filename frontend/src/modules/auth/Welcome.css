@@ -641,3 +641,160 @@
   0% { opacity: 0; transform: translateY(35px) scale(0.97); filter: blur(8px); }
   100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
+
+/* =========================================================
+   WELCOME — Responsive (≤768px)
+   ========================================================= */
+@media (max-width: 768px) {
+  .intro-brand-title {
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+  }
+
+  .intro-visual-core {
+    width: 150px;
+    height: 150px;
+  }
+
+  .intro-emblem {
+    width: 76px;
+    height: 76px;
+    font-size: 2.2rem;
+    border-radius: 20px;
+  }
+
+  .ring-outer {
+    width: 148px;
+    height: 148px;
+  }
+
+  .ring-inner {
+    width: 108px;
+    height: 108px;
+  }
+
+  .welcome-portal-card {
+    padding: 2rem 1.5rem;
+    border-radius: 28px;
+  }
+
+  .portal-title {
+    font-size: 2rem;
+  }
+
+  .portal-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .btn-portal-login,
+  .btn-portal-demo {
+    padding: 0.9rem 1.1rem;
+    font-size: 0.98rem;
+  }
+}
+
+/* =========================================================
+   WELCOME — Responsive (≤576px)
+   ========================================================= */
+@media (max-width: 576px) {
+  .finapp-welcome-stage {
+    padding: 1rem 0.75rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .welcome-portal-card {
+    padding: 1.75rem 1.1rem;
+    border-radius: 24px;
+  }
+
+  .portal-title {
+    font-size: 1.75rem;
+  }
+
+  .portal-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .intro-brand-title {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .intro-brand-tagline {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+
+  .intro-visual-core {
+    width: 130px;
+    height: 130px;
+    margin-bottom: 1.5rem;
+  }
+
+  .intro-emblem {
+    width: 66px;
+    height: 66px;
+    font-size: 1.9rem;
+    border-radius: 18px;
+  }
+
+  .ring-outer {
+    width: 128px;
+    height: 128px;
+  }
+
+  .ring-inner {
+    width: 92px;
+    height: 92px;
+  }
+
+  .intro-skip-btn {
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .btn-portal-login,
+  .btn-portal-demo {
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+    font-size: 0.95rem;
+  }
+
+  .btn-portal-login .sub-label,
+  .btn-portal-demo .sub-label {
+    font-size: 0.7rem;
+  }
+
+  .btn-portal-login .btn-arrow-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+  }
+
+  .btn-portal-demo .btn-demo-badge {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.55rem;
+  }
+
+  .about-finapp-section {
+    padding: 1rem;
+  }
+
+  .portal-footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    font-size: 0.78rem;
+  }
+
+  .intro-progress-panel {
+    width: 190px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}

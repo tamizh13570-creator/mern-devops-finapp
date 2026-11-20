@@ -113,12 +113,12 @@ const Reports = () => {
         </div>
 
         {/* Month Selector */}
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex align-items-center gap-2 flex-wrap">
           <label className="fw-semibold small text-muted text-nowrap">Select Month:</label>
           <input
             type="month"
             className="form-control fw-bold border shadow-sm"
-            style={{ width: '180px' }}
+            style={{ width: '180px', minWidth: '150px' }}
             value={monthYear}
             onChange={(e) => setMonthYear(e.target.value)}
           />
@@ -158,7 +158,7 @@ const Reports = () => {
       </div>
 
       {/* THREE PROMINENT DOWNLOAD CARDS (USER REQUIREMENT 3) */}
-      <div className="row g-4 mb-5">
+      <div className="row g-3 g-md-4 mb-5">
         {/* CSV Download Card */}
         <div className="col-12 col-md-4">
           <div className="download-btn-card csv-btn" onClick={handleDownloadCSV}>

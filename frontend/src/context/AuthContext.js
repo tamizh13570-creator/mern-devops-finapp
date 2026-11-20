@@ -55,6 +55,15 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
+  const getActiveOTP = async (email) => {
+    try {
+      const res = await api.get(`/auth/active-otp?email=${encodeURIComponent(email)}`);
+      return res.data;
+    } catch (err) {
+      return null;
+    }
+  };
+
   const verifyOTP = async (email, otp) => {
     const res = await api.post('/auth/verify-otp', { email, otp });
     const { token: receivedToken, user: receivedUser } = res.data.data;
@@ -111,6 +120,7 @@ export const AuthProvider = ({ children }) => {
         register,
         verifyOTP,
         resendOTP,
+        getActiveOTP,
         logout,
         unlockApp,
         setSecurityPin,

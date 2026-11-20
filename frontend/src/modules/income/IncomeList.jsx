@@ -53,13 +53,13 @@ const IncomeList = () => {
   return (
     <div>
       {/* Header */}
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4 flex-wrap">
         <div>
           <h2 className="fw-bold mb-1">Income Streams</h2>
           <p className="text-muted mb-0">Track all your earnings, salaries, and investment returns</p>
         </div>
 
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex align-items-center gap-2 flex-wrap">
           {/* Direct link to download module */}
           <Link
             to={`/reports?monthYear=${filters.monthYear}`}
@@ -133,7 +133,7 @@ const IncomeList = () => {
         </div>
       </div>
 
-      {/* Incomes Table */}
+      {/* Incomes Table + Mobile Cards */}
       <div className="fin-card">
         {loading ? (
           <div className="text-center py-5">
@@ -154,65 +154,127 @@ const IncomeList = () => {
             </button>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table className="table table-hover align-middle">
-              <thead className="table-light">
-                <tr>
-                  <th>Source</th>
-                  <th>Description</th>
-                  <th>Date</th>
-                  <th>Method</th>
-                  <th className="text-end">Amount</th>
-                  <th className="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {incomes.map((inc) => (
-                  <tr key={inc._id}>
-                    <td>
-                      <div className="d-flex align-items-center gap-2">
-                        <span className="badge bg-success bg-opacity-10 text-success p-2 rounded-circle fs-6">
-                          <i className="bi bi-cash"></i>
-                        </span>
-                        <span className="fw-semibold text-dark">{inc.source}</span>
+          <>
+            {/* Desktop Table — hidden on mobile */}
+            <div className="d-none d-md-block">
+              <div className="table-responsive">
+                <table className="table table-hover align-middle">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Source</th>
+                      <th>Description</th>
+                      <th>Date</th>
+                      <th>Method</th>
+                      <th className="text-end">Amount</th>
+                      <th className="text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {incomes.map((inc) => (
+                      <tr key={inc._id}>
+                        <td>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="badge bg-success bg-opacity-10 text-success p-2 rounded-circle fs-6">
+                              <i className="bi bi-cash"></i>
+                            </span>
+                            <span className="fw-semibold text-dark">{inc.source}</span>
+                          </div>
+                        </td>
+                        <td className="text-dark">{inc.note || '-'}</td>
+                        <td className="text-muted small">{formatDate(inc.date)}</td>
+                        <td>
+                          <span className="badge bg-light text-dark text-capitalize border">
+                            {inc.paymentMethod?.replace('_', ' ')}
+                          </span>
+                        </td>
+                        <td className="text-end fw-bold text-success fs-6">
+                          +₹{inc.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </td>
+                        <td className="text-end">
+                          <div className="btn-group btn-group-sm">
+                            <button
+                              className="btn btn-outline-secondary"
+                              onClick={() => {
+                                setSelectedIncome(inc);
+                                setModalOpen(true);
+                              }}
+                              title="Edit"
+                            >
+                              <i className="bi bi-pencil"></i>
+                            </button>
+                            <button
+                              className="btn btn-outline-danger"
+                              onClick={() => handleDelete(inc._id)}
+                              title="Delete"
+                            >
+                              <i className="bi bi-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Card List — hidden on tablet+ */}
+            <div className="d-md-none d-flex flex-column gap-2">
+              {incomes.map((inc) => (
+                <div
+                  key={inc._id}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '14px',
+                    padding: '14px',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="fs-4">💰</span>
+                      <div>
+                        <div className="fw-semibold text-light small">{inc.source}</div>
+                        <div className="text-muted" style={{ fontSize: '0.72rem' }}>
+                          {inc.note || '-'} • {formatDate(inc.date)}
+                        </div>
+                        <div className="text-muted" style={{ fontSize: '0.68rem' }}>
+                          <span className="badge bg-light text-dark text-capitalize border" style={{ fontSize: '0.65rem' }}>
+                            {inc.paymentMethod?.replace('_', ' ')}
+                          </span>
+                        </div>
                       </div>
-                    </td>
-                    <td className="text-dark">{inc.note || '-'}</td>
-                    <td className="text-muted small">{formatDate(inc.date)}</td>
-                    <td>
-                      <span className="badge bg-light text-dark text-capitalize border">
-                        {inc.paymentMethod?.replace('_', ' ')}
+                    </div>
+                    <div className="d-flex flex-column align-items-end gap-1">
+                      <span className="fw-bold text-success small">
+                        +₹{inc.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                       </span>
-                    </td>
-                    <td className="text-end fw-bold text-success fs-6">
-                      +₹{inc.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group btn-group-sm">
+                      <div className="d-flex gap-1">
                         <button
-                          className="btn btn-outline-secondary"
+                          className="btn btn-sm btn-outline-secondary p-1"
                           onClick={() => {
                             setSelectedIncome(inc);
                             setModalOpen(true);
                           }}
-                          title="Edit"
+                          style={{ minHeight: '32px', minWidth: '32px' }}
                         >
                           <i className="bi bi-pencil"></i>
                         </button>
                         <button
-                          className="btn btn-outline-danger"
+                          className="btn btn-sm btn-outline-danger p-1"
                           onClick={() => handleDelete(inc._id)}
-                          title="Delete"
+                          style={{ minHeight: '32px', minWidth: '32px' }}
                         >
                           <i className="bi bi-trash"></i>
                         </button>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 

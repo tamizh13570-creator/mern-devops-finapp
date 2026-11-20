@@ -18,7 +18,8 @@ const register = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: result.message || 'Registration successful. Please check your email for the OTP.',
-      data: { user: result.user },
+      otp: result.otp,
+      data: { user: result.user, otp: result.otp, emailSent: result.emailSent },
     });
   } catch (error) {
     next(error);
@@ -145,6 +146,23 @@ const resendOTP = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: result.message || 'A new OTP has been sent to your email.',
+      otp: result.otp,
+      data: { otp: result.otp, emailSent: result.emailSent },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getActiveOTP = async (req, res, next) => {
+  try {
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ success: false, message: 'Email is required.' });
+    const otp = await authService.getActiveOTP(email);
+    res.status(200).json({
+      success: true,
+      otp,
+      data: { otp },
     });
   } catch (error) {
     next(error);
@@ -163,4 +181,5 @@ module.exports = {
   updateProfile,
   changePassword,
   resendOTP,
+  getActiveOTP,
 };

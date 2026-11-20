@@ -46,14 +46,14 @@ const Login = () => {
 
   return (
     <div
-      className="d-flex align-items-center justify-content-center min-vh-100 p-3"
-      style={{ background: 'transparent' }}
+      className="d-flex align-items-start align-items-sm-center justify-content-center min-vh-100 p-3"
+      style={{ background: 'transparent', paddingTop: '1rem', paddingBottom: '1rem', overflowY: 'auto' }}
     >
       <div
         className="card border-0 shadow-lg p-4 p-md-5"
         style={{
           width: '100%',
-          maxWidth: '440px',
+          maxWidth: '480px',
           borderRadius: '28px',
           background: 'rgba(16, 23, 42, 0.75)',
           backdropFilter: 'blur(24px)',
@@ -102,6 +102,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                style={{ fontSize: '16px' }}
               />
             </div>
           </div>
@@ -121,6 +122,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                style={{ fontSize: '16px' }}
               />
             </div>
           </div>
@@ -128,6 +130,7 @@ const Login = () => {
           <button
             type="submit"
             className="btn btn-primary w-100 py-2 fw-semibold rounded-pill mb-3"
+            style={{ minHeight: '48px' }}
             disabled={loading || demoLoading}
           >
             {loading ? (

@@ -48,8 +48,8 @@ const Register = () => {
 
   return (
     <div
-      className="d-flex align-items-center justify-content-center min-vh-100 py-5 p-3"
-      style={{ background: 'transparent' }}
+      className="d-flex align-items-start align-items-sm-center justify-content-center min-vh-100 py-3 p-3"
+      style={{ background: 'transparent', paddingTop: '1rem', paddingBottom: '1rem', overflowY: 'auto' }}
     >
       <div
         className="card border-0 shadow-lg p-4 p-md-5"
@@ -87,6 +87,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              style={{ fontSize: '16px' }}
             />
           </div>
 
@@ -100,6 +101,7 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              style={{ fontSize: '16px' }}
             />
           </div>
 
@@ -112,6 +114,8 @@ const Register = () => {
               placeholder="10-digit mobile number"
               value={formData.phone}
               onChange={handleChange}
+              inputMode="numeric"
+              style={{ fontSize: '16px' }}
             />
           </div>
 
@@ -127,6 +131,7 @@ const Register = () => {
                 onChange={handleChange}
                 required
                 minLength={6}
+                style={{ fontSize: '16px' }}
               />
             </div>
             <div className="col-md-6">
@@ -140,6 +145,7 @@ const Register = () => {
                 onChange={handleChange}
                 required
                 minLength={6}
+                style={{ fontSize: '16px' }}
               />
             </div>
           </div>
@@ -148,6 +154,7 @@ const Register = () => {
             type="submit"
             className="btn btn-primary w-100 py-2 fw-semibold rounded-pill mb-3"
             disabled={loading}
+            style={{ minHeight: '48px' }}
           >
             {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : 'Continue with OTP'}
           </button>

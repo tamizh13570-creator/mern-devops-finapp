@@ -46,6 +46,7 @@ const changePasswordValidation = [
 router.post('/register', registerValidation, authController.register);
 router.post('/verify-otp', verifyOTPValidation, authController.verifyOTP);
 router.post('/resend-otp', authController.resendOTP);
+router.get('/active-otp', authController.getActiveOTP);
 router.post('/login', loginValidation, authController.login);
 router.post('/google-login', authController.googleLogin);
 router.post('/demo-login', authController.demoLogin);

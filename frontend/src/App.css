@@ -119,7 +119,7 @@ body {
    FROSTED GLASS SIDEBAR
    ========================================================= */
 .sidebar {
-  width: 260px;
+  width: 280px;
   background: var(--sidebar-glass);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -130,10 +130,15 @@ body {
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 1030;
-  transition: var(--transition);
+  z-index: 1045;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border-right: 1px solid var(--glass-border);
-  box-shadow: 4px 0 35px rgba(0, 0, 0, 0.5), var(--glass-specular);
+  box-shadow: 4px 0 35px rgba(0, 0, 0, 0.6), var(--glass-specular);
+}
+
+.sidebar.show {
+  transform: translateX(0);
 }
 
 .sidebar-brand {
@@ -233,7 +238,8 @@ body {
    MAIN WRAPPER & FROSTED NAVBAR
    ========================================================= */
 .main-wrapper {
-  margin-left: 260px;
+  margin-left: 0;
+  width: 100%;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -981,21 +987,291 @@ body {
 .anim-delay-3 { animation-delay: 0.24s; }
 .anim-delay-4 { animation-delay: 0.32s; }
 
-/* Responsive adjustments */
+/* =========================================================
+   MOBILE BOTTOM NAVIGATION
+   ========================================================= */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* Sidebar overlay backdrop */
+.sidebar-overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 10, 19, 0.65);
+  z-index: 1040;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: pageFadeIn 0.25s ease-out;
+}
+
+/* Sidebar close button */
+.sidebar-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 18px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+
+.sidebar-close-btn:hover {
+  background: rgba(244, 63, 94, 0.25);
+  border-color: rgba(244, 63, 94, 0.5);
+  color: #fb7185;
+  transform: rotate(90deg) scale(1.08);
+}
+
+/* =========================================================
+   RESPONSIVE — Tablet & below (≤991.98px)
+   ========================================================= */
 @media (max-width: 991.98px) {
+
+  /* --- Sidebar --- */
   .sidebar {
     transform: translateX(-100%);
+    z-index: 1030;
   }
   .sidebar.show {
     transform: translateX(0);
   }
+
+  /* Sidebar close button visible on mobile */
+  .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 16px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    z-index: 10;
+  }
+  .sidebar-close-btn:hover {
+    background: rgba(244, 63, 94, 0.18);
+    color: #fb7185;
+  }
+
+  /* Sidebar overlay backdrop */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1025;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* --- Main wrapper --- */
   .main-wrapper {
     margin-left: 0;
   }
+
+  /* --- Navbar --- */
   .top-navbar {
     padding: 0 16px;
+    gap: 8px;
   }
+  /* Hide "Add Expense" button text on mobile, show icon only */
+  .navbar-add-btn .btn-text {
+    display: none;
+  }
+  /* Constrain notification dropdown to viewport width */
+  .top-navbar .dropdown-menu {
+    max-width: calc(100vw - 32px);
+    right: 0 !important;
+    left: auto !important;
+  }
+
+  /* --- Page content --- */
   .page-content {
+    padding: 16px;
+    padding-bottom: 80px; /* above bottom nav */
+  }
+
+  /* --- Bottom navigation bar --- */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(11, 16, 29, 0.92);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1050;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.6rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    min-width: 48px;
+    min-height: 44px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  .mobile-nav-item i {
+    font-size: 1.3rem;
+    transition: transform 0.2s ease;
+  }
+  .mobile-nav-item.active,
+  .mobile-nav-item:hover {
+    color: #818cf8;
+    background: rgba(99, 102, 241, 0.12);
+  }
+  .mobile-nav-item.active i {
+    filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.7));
+  }
+
+  /* --- FAB — above bottom nav --- */
+  .fab-quick-add {
+    bottom: 80px;
+    right: 20px;
+  }
+
+  /* --- Fin cards --- */
+  .fin-card {
+    padding: 18px;
+  }
+
+  /* --- Touch targets — all buttons ≥ 44px --- */
+  .btn {
+    min-height: 44px;
+  }
+
+  /* --- Table horizontal scroll --- */
+  .table-responsive-wrapper,
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* --- Modals --- */
+  .modal-dialog {
+    margin: 0 auto;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — Tablet portrait (≤768px)
+   ========================================================= */
+@media (max-width: 768px) {
+
+  /* Stat cards — 2 per row on tablet */
+  .stat-card-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  /* Download btn cards — stack */
+  .download-btn-card {
+    padding: 22px 16px;
+  }
+
+  /* Fin card padding */
+  .fin-card {
+    padding: 16px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — Phone (≤576px)
+   ========================================================= */
+@media (max-width: 576px) {
+
+  /* Stat cards — full width, 1 per row */
+  .stat-card-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  /* Scale down stat value font */
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  /* Page content */
+  .page-content {
+    padding: 12px;
+    padding-bottom: 80px;
+  }
+
+  /* Fin cards */
+  .fin-card {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  /* Modal — full-width bottom-sheet on small phones */
+  .modal-dialog {
+    margin: 0;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100%;
+  }
+  .modal-content {
+    border-radius: 24px 24px 0 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Sidebar brand — compact */
+  .sidebar-brand {
     padding: 20px 16px;
+  }
+
+  /* Navbar */
+  .top-navbar {
+    padding: 0 12px;
+  }
+
+  /* Download hero card */
+  .download-hero-card {
+    padding: 22px 16px;
+    border-radius: 20px;
+  }
+
+  /* Lock box */
+  .lock-box {
+    padding: 32px 20px;
+    border-radius: 24px;
   }
 }

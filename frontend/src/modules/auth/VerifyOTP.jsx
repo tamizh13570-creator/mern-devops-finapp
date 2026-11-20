@@ -134,26 +134,41 @@ const VerifyOTP = () => {
 
         {/* Dynamically Generated OTP Display Box */}
         {currentOtp ? (
-          <div className="alert alert-primary py-2 px-3 small mb-3 border-0 rounded-3 shadow-sm bg-primary bg-opacity-10 text-dark">
-            <div className="d-flex align-items-center justify-content-between">
-              <div>
-                <i className="bi bi-key-fill text-primary me-2 fs-6"></i>
-                <span className="text-muted">Generated OTP:</span>{' '}
-                <strong className="fs-5 text-primary" style={{ letterSpacing: '4px' }}>
-                  {currentOtp}
-                </strong>
+          <div
+            className="p-3 mb-3 rounded-4 shadow-sm"
+            style={{
+              background: 'rgba(99, 102, 241, 0.12)',
+              border: '1.5px solid rgba(99, 102, 241, 0.35)',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <div className="d-flex align-items-center justify-content-between mb-2">
+              <div className="d-flex align-items-center gap-2">
+                <span className="badge bg-primary px-2 py-1 rounded-pill" style={{ fontSize: '0.7rem' }}>
+                  <i className="bi bi-shield-check me-1"></i> VERIFICATION CODE
+                </span>
               </div>
               <button
                 type="button"
-                className="btn btn-sm btn-outline-primary py-1 px-2 fw-semibold"
+                className="btn btn-sm btn-primary py-1 px-3 fw-bold rounded-pill shadow-sm"
                 onClick={() => setOtp(currentOtp)}
                 title="Fill generated OTP into input box"
               >
-                Auto-fill
+                <i className="bi bi-magic me-1"></i> Auto-fill OTP
               </button>
             </div>
-            <div className="text-muted mt-1 small" style={{ fontSize: '11px' }}>
-              Valid for 5 minutes. You can click <strong>"Generate New OTP"</strong> below at any time to generate a new code.
+            <div className="d-flex align-items-center justify-content-between py-1">
+              <span className="text-muted small">Your Code:</span>
+              <strong className="fs-3 text-light fw-bold" style={{ letterSpacing: '6px', fontFamily: 'monospace' }}>
+                {currentOtp}
+              </strong>
+            </div>
+            <div
+              className="text-muted mt-2 small"
+              style={{ fontSize: '11px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '6px' }}
+            >
+              <i className="bi bi-info-circle me-1 text-primary"></i>
+              Valid for 5 mins. Click <strong>"Auto-fill OTP"</strong> or type the code to verify.
             </div>
           </div>
         ) : (
@@ -195,12 +210,14 @@ const VerifyOTP = () => {
               type="text"
               maxLength={6}
               className="form-control text-center fs-3 fw-bold bg-light"
-              style={{ letterSpacing: '8px' }}
+              style={{ letterSpacing: '8px', minHeight: '60px', fontSize: '1.6rem' }}
               placeholder="••••••"
               value={otp}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
               required
               autoFocus
+              inputMode="numeric"
+              pattern="[0-9]*"
             />
           </div>
 

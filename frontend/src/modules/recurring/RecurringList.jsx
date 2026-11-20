@@ -150,65 +150,122 @@ const RecurringList = () => {
             </button>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table className="table table-hover align-middle">
-              <thead className="table-light">
-                <tr>
-                  <th>Description</th>
-                  <th>Type</th>
-                  <th>Frequency</th>
-                  <th>Next Due Date</th>
-                  <th>Status</th>
-                  <th className="text-end">Amount</th>
-                  <th className="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((it) => (
-                  <tr key={it._id}>
-                    <td>
-                      <div className="d-flex align-items-center gap-2">
-                        <span className="fs-5">{it.category?.icon || (it.type === 'income' ? '💰' : '🔁')}</span>
-                        <div>
-                          <div className="fw-semibold text-dark">{it.note || it.category?.name || it.source}</div>
-                          <div className="small text-muted">{it.paymentMethod}</div>
+          <>
+            {/* Desktop Table — hidden on mobile */}
+            <div className="d-none d-md-block">
+              <div className="table-responsive">
+                <table className="table table-hover align-middle">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Description</th>
+                      <th>Type</th>
+                      <th>Frequency</th>
+                      <th>Next Due Date</th>
+                      <th>Status</th>
+                      <th className="text-end">Amount</th>
+                      <th className="text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items.map((it) => (
+                      <tr key={it._id}>
+                        <td>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="fs-5">{it.category?.icon || (it.type === 'income' ? '💰' : '🔁')}</span>
+                            <div>
+                              <div className="fw-semibold text-dark">{it.note || it.category?.name || it.source}</div>
+                              <div className="small text-muted">{it.paymentMethod}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`badge ${it.type === 'income' ? 'bg-success' : 'bg-danger'} text-capitalize`}>
+                            {it.type}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="badge bg-light text-dark border text-capitalize">
+                            {it.frequency}
+                          </span>
+                        </td>
+                        <td className="small fw-semibold">{formatDate(it.nextDueDate)}</td>
+                        <td>
+                          <button
+                            className={`btn btn-sm rounded-pill px-3 fw-semibold ${
+                              it.isActive ? 'btn-success' : 'btn-secondary opacity-75'
+                            }`}
+                            onClick={() => handleToggle(it._id)}
+                          >
+                            {it.isActive ? 'Active' : 'Paused'}
+                          </button>
+                        </td>
+                        <td className={`text-end fw-bold fs-6 ${it.type === 'income' ? 'text-success' : 'text-danger'}`}>
+                          {it.type === 'income' ? '+' : '-'}₹{it.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </td>
+                        <td className="text-end">
+                          <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(it._id)}>
+                            <i className="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Card List — visible only on mobile */}
+            <div className="d-md-none d-flex flex-column gap-2">
+              {items.map((it) => (
+                <div
+                  key={it._id}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '14px',
+                    padding: '14px',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                >
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="fs-4">{it.category?.icon || (it.type === 'income' ? '💰' : '🔁')}</span>
+                      <div>
+                        <div className="fw-semibold text-light small">{it.note || it.category?.name || it.source}</div>
+                        <div className="text-muted" style={{ fontSize: '0.72rem' }}>
+                          {it.frequency} • Due: {formatDate(it.nextDueDate)}
+                        </div>
+                        <div className="d-flex gap-1 mt-1 flex-wrap">
+                          <span className={`badge ${it.type === 'income' ? 'bg-success' : 'bg-danger'} text-capitalize`} style={{ fontSize: '0.62rem' }}>
+                            {it.type}
+                          </span>
+                          <button
+                            className={`badge border-0 ${it.isActive ? 'bg-success' : 'bg-secondary'}`}
+                            style={{ fontSize: '0.62rem', cursor: 'pointer' }}
+                            onClick={() => handleToggle(it._id)}
+                          >
+                            {it.isActive ? 'Active' : 'Paused'}
+                          </button>
                         </div>
                       </div>
-                    </td>
-                    <td>
-                      <span className={`badge ${it.type === 'income' ? 'bg-success' : 'bg-danger'} text-capitalize`}>
-                        {it.type}
+                    </div>
+                    <div className="d-flex flex-column align-items-end gap-1">
+                      <span className={`fw-bold small ${it.type === 'income' ? 'text-success' : 'text-danger'}`}>
+                        {it.type === 'income' ? '+' : '-'}₹{it.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                       </span>
-                    </td>
-                    <td>
-                      <span className="badge bg-light text-dark border text-capitalize">
-                        {it.frequency}
-                      </span>
-                    </td>
-                    <td className="small fw-semibold">{formatDate(it.nextDueDate)}</td>
-                    <td>
                       <button
-                        className={`btn btn-sm rounded-pill px-3 fw-semibold ${
-                          it.isActive ? 'btn-success' : 'btn-secondary opacity-75'
-                        }`}
-                        onClick={() => handleToggle(it._id)}
+                        className="btn btn-sm btn-outline-danger p-1"
+                        onClick={() => handleDelete(it._id)}
+                        style={{ minHeight: '32px', minWidth: '32px' }}
                       >
-                        {it.isActive ? 'Active' : 'Paused'}
-                      </button>
-                    </td>
-                    <td className={`text-end fw-bold fs-6 ${it.type === 'income' ? 'text-success' : 'text-danger'}`}>
-                      {it.type === 'income' ? '+' : '-'}₹{it.amountInRupees?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                    </td>
-                    <td className="text-end">
-                      <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(it._id)}>
                         <i className="bi bi-trash"></i>
                       </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
